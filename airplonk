@@ -17,14 +17,14 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 declare -r TITLE="AirPlonk"
-declare -r VERSION=1.0.0
+declare -r VERSION=1.0.2
 declare -r REVISION_DATE="January 2021"
 declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig" "nmap"\
-                                  "printf" "rsync" "sleep" "stty" "tput"\
+                                  "printf" "rsync" "sed" "sleep" "stty" "tput"\
 																	"unbuffer" "xargs" "xdg-open")
 declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig" "nmap"\
-                                  "open" "printf" "rsync" "sleep" "stty" "tput"\
-                                  "unbuffer" "xargs")
+                                  "open" "printf" "rsync" "sed" "sleep" "stty"\
+                                  "tput" "unbuffer" "xargs")
 
 declare ARG             # Optional arg value from runtime.
 declare -a NAMES=()     # Discovered hostnames.
