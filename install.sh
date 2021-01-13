@@ -16,4 +16,4 @@
 #   Done.
 
 cp airplonk /usr/local/bin
-cp /doc/airplonk.1 /usr/local/share/man/man1 
+cp doc/airplonk.1 /usr/local/share/man/man1 
