@@ -31,25 +31,35 @@ Download this .deb package, then in the enclosing directory,
 ```
 dpkg -i 
 ```
+
 ### Homebrew
 ```
 brew tap daaanstraight/airplonk
 brew install airplonk
 ```
+
 ### MacOS
 ```
 git clone https://github.com/daaanstraight/AirPlonk
 cd AirPlonk
-./install_macOS
+./install_macOS.sh
 ```
+The install_macos.sh will take care of putting files where they need to be, but
+you'll need to install the project dependencies on your own. AirPlonk will however
+list these for us should it detect any.
+
 ### Android-Termux 
 ```
 git clone https://github.com/daaanstraight/AirPlonk
 cd AirPlonk
-./install_termux
+./install_termux.sh
 ```
-### Otherwise
+The install_termux.sh script will take care of installing the necessary dependencies.
+Note: Use 'bash airplonk' to run if you don't have root permission!
 
+### Otherwise
+Git clone this project. The 'airplonk' file contains all the neccesarry logic and the 
+man page is in doc/airplonk.1 - move them where you need them.
 
 ## Help
 
