@@ -32,11 +32,22 @@ Download this .deb package, then in the enclosing directory,
 dpkg -i 
 ```
 ### Homebrew
-
+```
+brew tap daaanstraight/airplonk
+brew install airplonk
+```
 ### MacOS
-
+```
+git clone https://github.com/daaanstraight/AirPlonk
+cd AirPlonk
+./install_macOS
+```
 ### Android-Termux 
-
+```
+git clone https://github.com/daaanstraight/AirPlonk
+cd AirPlonk
+./install_termux
+```
 ### Otherwise
 
 
