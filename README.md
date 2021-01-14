@@ -38,7 +38,7 @@ brew tap daaanstraight/airplonk
 brew install airplonk
 ```
 
-### MacOS
+### macOS
 ```
 git clone https://github.com/daaanstraight/AirPlonk
 cd AirPlonk
