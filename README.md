@@ -27,7 +27,7 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 ## How To Install
 
 ### Debian (Mint, Ubuntu, Kali ...)
-Download this .deb package, then in the enclosing directory,
+Download this .deb package, then in the enclosing directory:
 ```
 dpkg -i 
 ```
