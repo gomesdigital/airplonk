@@ -10,3 +10,4 @@
      d8888888888 888       .Wl .Nl    0     ;,    ,.
     d88P     888 888        dKxO0.    .      .    .
 
+Uses nmap and rsync to quickly identify nodes and push files to them.
