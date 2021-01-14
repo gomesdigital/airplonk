@@ -26,25 +26,25 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 
 ## How To Install
 
-# On Debian (Mint, Ubuntu, Kali ...)
+### On Debian (Mint, Ubuntu, Kali ...)
 
-# Homebrew
+### Homebrew
 
-# MacOS
+### MacOS
 
-# Android-Termux 
-
-
-# Help
+### Android-Termux 
 
 
-# Contributing
+## Help
 
 
-# License
+## Contributing
 
 
-# Author Info
+## License
+
+
+## Author Info
 
 [nmap]: https://github.com/nmap/nmap
 [rsync]: https://github.com/WayneD/rsync
