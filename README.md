@@ -12,7 +12,39 @@
 
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
 
+### Table of conents:
+
+[How To Use]
+[How To Install]
+[Help]
+[Contributing]
+[License]
+[Author Info]
+
+## How To Use
+
+
+## How To Install
+
+# On Debian (Mint, Ubuntu, Kali ...)
+
+# Homebrew
+
+# MacOS
+
+# Android-Termux 
+
+
+# Help
+
+
+# Contributing
+
+
+# License
+
+
+# Author Info
+
 [nmap]: https://github.com/nmap/nmap
 [rsync]: https://github.com/WayneD/rsync
-
-# How to use it:
