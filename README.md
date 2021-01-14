@@ -14,12 +14,12 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 
 ### Table of conents:
 
-[How To Use](#How-To-Use)
-[How To Install](#How-To-Install)
-[Help](#Help)
-[Contributing](#Contributing)
-[License](#License)
-[Author Info](#Author Info)
+- [How To Use](#How-To-Use)
+- [How To Install](#How-To-Install)
+- [Help](#Help)
+- [Contributing](#Contributing)
+- [License](#License)
+- [Author Info](#Author-Info)
 
 ## How To Use
 
