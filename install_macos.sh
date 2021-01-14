@@ -1,5 +1,5 @@
 #! /bin/bash
-#
+# 
 # A script for installing AirPlonk on macOS.
 #
 # How to use it:
