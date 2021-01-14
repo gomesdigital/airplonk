@@ -45,7 +45,7 @@ cd AirPlonk
 ./install_macOS.sh
 ```
 The install_macos.sh script will take care of putting files where they need to 
-be but, you'll need to install the project dependencies on your own. AirPlonk 
+be, but you'll need to install the project dependencies on your own. AirPlonk 
 will however list these for us should it detect any.
 
 ### Android-Termux 
