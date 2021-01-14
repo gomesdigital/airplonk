@@ -1,5 +1,5 @@
 #! /data/data/com.termux/files/usr/bin/bash
-#
+# 
 # A script for installing AirPlonk on Termux.
 #
 # How to use it:
