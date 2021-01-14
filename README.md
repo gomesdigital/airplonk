@@ -10,4 +10,3 @@
      d8888888888 888       .Wl .Nl    0     ;,    ,.
     d88P     888 888        dKxO0.    .      .    .
 
-<span style="color:blue">some *blue* text</span>.
