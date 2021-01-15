@@ -1,4 +1,4 @@
-bash#! /bin/bash
+#! /bin/bash
 #
 #  Push your current directory to SSH-able nodes in your local net.
 #
