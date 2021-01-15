@@ -1,4 +1,4 @@
-#! /bin/bash
+bash#! /bin/bash
 #
 #  Push your current directory to SSH-able nodes in your local net.
 #
@@ -248,7 +248,7 @@ function transmit() {
 	printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> "
 	read -r username; printf "\n"
 	rsync -a --rsync-path="mkdir -p ~/AirPlonk/ && rsync" --info=progress2 "$PWD/"\
-   "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonk/"$destination"\
+   "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
 	  | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
 }
 
