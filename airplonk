@@ -247,7 +247,7 @@ function transmit() {
   destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
 	printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> "
 	read -r username; printf "\n"
-	rsync -a --rsync-path="mkdir -p ~/AirPlonk/ && rsync" --info=progress2 "$PWD/"\
+	rsync -a --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2 "$PWD/"\
    "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
 	  | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
 }
