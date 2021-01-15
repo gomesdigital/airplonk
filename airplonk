@@ -17,7 +17,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 declare -r TITLE="AirPlonk"
-declare -r VERSION=1.0.2
+declare -r VERSION=1.0.3
 declare -r REVISION_DATE="January 2021"
 declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig" "nmap"\
                                   "printf" "rsync" "sed" "sleep" "stty" "tput"\
@@ -606,9 +606,6 @@ function help() {
 	 printf "       AirPlonk is a no-fuss way to push stuff to SSH-able nodes on your local\n"
 	 printf "       network. It will push your current working directory into ~/AirPlonk on\n"
 	 printf "       the target node.\n\n"
-	 printf "       PLEASE NOTE: If the cargo directory has the same name as another \n"
-	 printf "                    directory (in ~/AirPlonk) on the target node, that directory\n"
-	 printf "                    (on the target node) will be overwritten.\n"
    usage
 	 printf "\n\e[1mBUGS\e[0m\n"
 	 printf "       See our issues on GitHub:\n\n"
