@@ -67,7 +67,12 @@ This project is licensed under the GNU General Public License v3.0. See the LICE
 ## Author Info
 
 * **Daniel Gomes-Sebastiao** - *Initial work* - [daaanstraight](https://github.com/daaanstraight)
+
 See also the list of contributors who participated in this project.
+
+## Acknowledgements
+
+
 
 ### Table of conents:
 
