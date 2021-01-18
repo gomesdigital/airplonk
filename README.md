@@ -42,7 +42,7 @@ Note: Use 'bash airplonk' to run if you don't have root permission.
 Clone this project. The 'airplonk' file contains all the neccesarry logic 
 and the man page is at doc/airplonk.1 - move them where you need them.
 
-### Demo
+## Demo
 
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
