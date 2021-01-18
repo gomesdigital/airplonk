@@ -1,8 +1,6 @@
 # AirPlonk
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
 
-![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
-
 ### Table of conents:
 
 - [How To Use](#How-To-Use)
@@ -14,7 +12,7 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 
 ## How To Use
 
-
+![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
 ## How To Install
 
