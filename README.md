@@ -1,4 +1,5 @@
 # AirPlonk
+
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
 
 ### Table of conents:
@@ -10,11 +11,11 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 - [License](#License)
 - [Author Info](#Author-Info)
 
-## How To Use
+### Demo
 
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
-## How To Install
+### How To Install
 
 ### Debian (Mint, Ubuntu, Kali ...)
 Download this .deb package, then in the enclosing directory:
