@@ -12,23 +12,7 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 
 ## How To Use
 
-![](demo_termux.gif)   
-<p align="top">
-  <img src="demo_macos.gif" alt="animated" />
-</p>
-
-.column {
-  float: left;
-  width: 33.33%;
-  padding: 5px;
-}
-
-/* Clear floats after image containers */
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
+![](demo_termux.gif) ![](demo_macos.gif)   
 
 ## How To Install
 
