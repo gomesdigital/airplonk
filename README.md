@@ -48,6 +48,17 @@ and the man page is at doc/airplonk.1 - move them where you need them.
 
 ## Help
 
+Run
+```
+man airplonk
+```
+
+or try
+```
+airplonk -h
+```
+
+to see features and troubleshooting.
 
 ## Contributing
 
