@@ -17,6 +17,19 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
   <img src="demo_macos.gif" alt="animated" />
 </p>
 
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
 ## How To Install
 
 ### Debian (Mint, Ubuntu, Kali ...)
