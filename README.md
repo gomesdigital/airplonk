@@ -11,25 +11,25 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 - [License](#License)
 - [Author Info](#Author-Info)
 
-### Demo
+## Demo
 
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
-### Installing
+## Installing
 
-#### Debian (Mint, Ubuntu, Kali ...)
+### Debian (Mint, Ubuntu, Kali ...)
 Download this .deb package, then in the enclosing directory:
 ```
 sudo dpkg -i airplonk_1.0.3_all.deb
 ```
 
-#### Homebrew
+### Homebrew
 ```
 brew tap daaanstraight/airplonk
 brew install airplonk
 ```
 
-#### macOS
+### macOS
 ```
 git clone https://github.com/daaanstraight/AirPlonk
 cd AirPlonk
@@ -39,7 +39,7 @@ The install_macos.sh script will take care of putting files where they need to
 be, but you'll need to install the project dependencies on your own. AirPlonk 
 will however list these for you should it detect any.
 
-#### Android-Termux 
+### Android-Termux 
 ```
 git clone https://github.com/daaanstraight/AirPlonk
 cd AirPlonk
