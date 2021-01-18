@@ -15,7 +15,7 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
-### How To Install
+### Installing
 
 #### Debian (Mint, Ubuntu, Kali ...)
 Download this .deb package, then in the enclosing directory:
