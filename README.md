@@ -54,7 +54,7 @@ and the man page is in doc/airplonk.1 - move them where you need them.
 
 ## License
 
-
+This project is licensed under the GNU General Public License v3.0. See the LICENSE file for details
 ## Author Info
 
 ### Table of conents:
