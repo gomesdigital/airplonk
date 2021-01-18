@@ -39,8 +39,8 @@ dependencies.<br/>
 Note: Use 'bash airplonk' to run if you don't have root permission.
 
 #### Windows & Otherwise
-Clone this project, the 'airplonk' file contains all the neccesarry logic 
-and the man page is in doc/airplonk.1 - move them where you need them.
+Clone this project. the 'airplonk' file contains all the neccesarry logic 
+and the man page is at doc/airplonk.1 - move them where you need them.
 
 #### Demo
 
