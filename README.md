@@ -12,7 +12,7 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 
 ## How To Use
 
-![](demo_termux.gif) ![](demo_macos.gif)
+![](demo_termux.gif)          ![](demo_macos.gif)
 
 ## How To Install
 
