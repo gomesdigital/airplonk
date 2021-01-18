@@ -47,18 +47,14 @@ and the man page is at doc/airplonk.1 - move them where you need them.
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
 ## Help
-
-Run
+To see features and troubleshooting, run
 ```
 man airplonk
 ```
-
 or try
 ```
 airplonk -h
 ```
-
-to see features and troubleshooting.
 
 ## Contributing
 
