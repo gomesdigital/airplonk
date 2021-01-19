@@ -6,7 +6,7 @@ Uses [nmap] and [rsync] to quickly identify nodes and push files to them over po
 
 ### Prerequisites
 
-A bash environment, that's all. 
+A [bash](https://github.com/topics/bash) environment, that's all. 
 
 On Linux, macOS and Termux this is available by default.
 
