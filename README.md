@@ -72,6 +72,20 @@ See also the list of contributors who participated in this project.
 
 ## Acknowledgements
 
+After returning from a short road trip I wanted to dump some media from my android onto my desktop...
+
+Problem: 
+1. At the time my Hackintosh didn't have a configured bluetooth module. (And I wasn't even going to bother with Android File Transfer.)
+2. The files I was after were quite large. I wanted them now and I wasn't about to send them off to some server in Iceland just to re-download
+   them to the same room. They were right here.
+
+My girlfriend said - "Just AirDrop it."
+
+And so, AirPlonk was born - a somewhat OS-agnostic solution for exactly this. 
+
+Amongst this I have quite a few headless devices, and it's become quite cumbersome to keep track of their hostnames/ip's for when I want to shoot something over to them. AirPlonk has been serving this well.
+
+Enjoy.
 
 
 ### Table of conents:
