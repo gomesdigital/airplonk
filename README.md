@@ -2,16 +2,6 @@
 
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
 
-## Table of conents:
-
-- [Getting-Started](#Getting-Started)
-- [Install](#Installing)
-- [Help](#Help)
-- [Contributing](#Contributing)
-- [License](#License)
-- [Author Info](#Author-Info)
-- [Acknowledgements](#Acknowledgements)
-
 ## Getting Started
 
 ### Installing
