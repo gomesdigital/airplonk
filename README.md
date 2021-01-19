@@ -2,6 +2,16 @@
 
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
 
+## Table of conents:
+
+- [Getting-Started](#Getting-Started)
+- [Install](#Installing)
+- [Help](#Help)
+- [Contributing](#Contributing)
+- [License](#License)
+- [Author Info](#Author-Info)
+- [Acknowledgements](#Acknowledgements)
+
 ## Getting Started
 
 ### Installing
@@ -86,16 +96,6 @@ And so, AirPlonk was born - a somewhat OS-agnostic solution for exactly this.
 Amongst this I have quite a few headless devices, and it's become quite cumbersome to keep track of their hostnames/ip's for when I want to shoot something over to them. AirPlonk has been serving this well.
 
 Enjoy.
-
-
-### Table of conents:
-
-- [How To Use](#How-To-Use)
-- [How To Install](#How-To-Install)
-- [Help](#Help)
-- [Contributing](#Contributing)
-- [License](#License)
-- [Author Info](#Author-Info)
 
 [nmap]: https://github.com/nmap/nmap
 [rsync]: https://github.com/WayneD/rsync
