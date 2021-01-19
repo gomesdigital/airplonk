@@ -63,7 +63,7 @@ Pushing files from android to macOS.
 
 AirPlonk pushes your current working directory to the target node of your choosing.
 
-To see features and troubleshooting, run
+To see the manual, run
 ```
 man airplonk
 ```
@@ -71,6 +71,16 @@ or try
 ```
 airplonk -h
 ```
+
+Can't find any nodes...?
+
+It is likely that your target node is not running an SSH service.
+
+Run
+```
+airplonk -t
+```
+to troubleshoot.
 
 ## Contributing
 
