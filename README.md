@@ -1,4 +1,4 @@
-# AirPlonk [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Get%20over%20170%20free%20design%20blocks%20based%20on%20Bootstrap%204&url=https://froala.com/design-blocks&via=froala&hashtags=bootstrap,design,templates,blocks,developers)
+# AirPlonk
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/daaanstraight/AirPlonk/LICENSE)
 
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
