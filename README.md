@@ -52,7 +52,7 @@ and the man page is at doc/airplonk.1 - move them where you need them.
 
 ## Demo
 
-Pushing files from my android to macOS.
+Pushing files from android to macOS.
 
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
