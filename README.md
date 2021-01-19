@@ -1,4 +1,5 @@
 # AirPlonk
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/daaanstraight/AirPlonk/LICENSE)
 
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
 
