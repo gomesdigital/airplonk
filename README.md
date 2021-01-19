@@ -52,9 +52,14 @@ and the man page is at doc/airplonk.1 - move them where you need them.
 
 ## Demo
 
+Pushing files from my android to macOS.
+
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
 ## Help
+
+AirPlonk pushes your current working directory to the target node of your choosing.
+
 To see features and troubleshooting, run
 ```
 man airplonk
