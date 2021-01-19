@@ -72,11 +72,7 @@ or try
 airplonk -h
 ```
 
-Can't find any nodes...?
-
-It is likely that your target node is not running an SSH service.
-
-Run
+Can't find any nodes...? Run
 ```
 airplonk -t
 ```
