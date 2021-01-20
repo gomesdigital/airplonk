@@ -23,7 +23,7 @@ Windows will require a seperate installation.
 #### Debian (Mint, Ubuntu, Kali ...)
 Download this [.deb package](https://github.com/daaanstraight/AirPlonk/raw/main/airplonk_1.0.0_all.deb), then in the enclosing directory:
 ```
-sudo dpkg -i airplonk_1.0.1_all.deb
+sudo dpkg -i airplonk_1.0.0_all.deb
 ```
 
 #### Homebrew
