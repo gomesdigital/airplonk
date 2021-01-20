@@ -56,6 +56,12 @@ Note: Try 'bash airplonk' to run if you don't have root permission.
 Clone this project. The 'airplonk' file contains all the logic and the man
 page is called 'airplonk.1' - move them where you need them.
 
+After installing, use
+```
+airplonk
+```
+to run.
+
 ## Demo
 
 Pushing files from android to macOS.
