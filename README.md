@@ -1,4 +1,4 @@
-
+![](banner.png) 
 
 ![](https://img.shields.io/github/issues/daaanstraight/AirPlonk?color=yellow)
 ![](https://img.shields.io/github/languages/code-size/daaanstraight/AirPlonk?color=green)
@@ -58,7 +58,6 @@ page is called 'airplonk.1' - move them where you need them.
 
 Pushing files from android to macOS.
 
-![](banner.jpg) 
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
 ## Help
