@@ -65,6 +65,7 @@ to start.
 
 ## Demo
 AirPlonk pushes your current working directory to the target node of your choosing.
+
 In this example: pushing files from android to macOS.
 
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
