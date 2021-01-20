@@ -81,7 +81,7 @@ to troubleshoot.
 
 ## Contributing
 
-Please read [doc/CONTRIBUTING.md] for details on our code of conduct, and the process for submitting pull requests to us.
+Please read the [CONTRIBUTING](/doc/CONTRIBUTING.md) file for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
 
