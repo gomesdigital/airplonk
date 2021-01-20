@@ -50,7 +50,7 @@ cd AirPlonk
 ```
 The 'install_termux.sh' script will take care of installing the necessary 
 dependencies.<br/>
-Note: Use 'bash airplonk' to run if you don't have root permission.
+Note: Try 'bash airplonk' to run if you don't have root permission.
 
 #### Windows & Otherwise
 Clone this project. The 'airplonk' file contains all the logic and the man
