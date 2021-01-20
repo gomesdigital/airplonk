@@ -91,7 +91,7 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 
 * **Daniel Gomes-Sebastiao** - *Initial work* - [daaanstraight](https://github.com/daaanstraight)
 
-See also the list of contributors who participated in this project.
+See also the list of [contributors](https://github.com/daaanstraight/AirPlonk/graphs/contributors) who participated in this project.
 
 ## Acknowledgements
 
