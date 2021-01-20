@@ -18,7 +18,7 @@ Windows will require a seperate installation.
 ### Installing
 
 #### Debian (Mint, Ubuntu, Kali ...)
-Download this [.deb package](airplonk_1.0.3_all.deb), then in the enclosing directory:
+Download this [.deb package](https://github.com/daaanstraight/AirPlonk/raw/main/airplonk_1.0.1_all.deb), then in the enclosing directory:
 ```
 sudo dpkg -i airplonk_1.0.3_all.deb
 ```
