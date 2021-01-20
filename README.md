@@ -50,8 +50,8 @@ dependencies.<br/>
 Note: Use 'bash airplonk' to run if you don't have root permission.
 
 #### Windows & Otherwise
-Clone this project. The 'airplonk' file contains all the neccesarry logic 
-and the man page is at doc/airplonk.1 - move them where you need them.
+Clone this project. The 'airplonk' file contains all the logic and the man
+page is called 'airplonk.1' - move them where you need them.
 
 ## Demo
 
@@ -81,7 +81,7 @@ to troubleshoot.
 
 ## Contributing
 
-Please read the [CONTRIBUTING](/doc/CONTRIBUTING.md) file for details on our code of conduct, and the process for submitting pull requests to us.
+Please read the [CONTRIBUTING](CONTRIBUTING.md) file for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
 
