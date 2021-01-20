@@ -608,7 +608,8 @@ function help() {
 	 printf "       the target node.\n\n"
    usage
 	 printf "\n\e[1mBUGS\e[0m\n"
-	 printf "       See our issues on GitHub:\n\n"
+	 printf "       See our issues on GitHub: "
+   printf "https://github.com/daaanstraight/AirPlonk/issues\n\n"
 	 printf "       If you have detected a bug, please open an issue on the GitHub page\n"
 	 printf "       linked above.\n"
 	 printf "\n\e[1mAUTHORS\e[0m\n"
