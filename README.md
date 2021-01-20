@@ -64,14 +64,12 @@ airplonk
 to start.
 
 ## Demo
-
-Pushing files from android to macOS.
+AirPlonk pushes your current working directory to the target node of your choosing.
+In this example: pushing files from android to macOS.
 
 ![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
 
 ## Help
-
-AirPlonk pushes your current working directory to the target node of your choosing.
 
 To see the manual, run
 ```
