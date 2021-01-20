@@ -57,11 +57,11 @@ Clone this project. The 'airplonk' file contains all the logic and the man
 page is called 'airplonk.1' - move them where you need them.
 
 #### After installing
-Use
+Run
 ```
 airplonk
 ```
-to run.
+to start.
 
 ## Demo
 
