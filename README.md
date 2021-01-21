@@ -16,7 +16,7 @@ A [bash](https://github.com/topics/bash) environment, that's all.
 
 On Linux, macOS and Termux this is available by default.
 
-Windows will require a seperate ![installation](https://itsfoss.com/install-bash-on-windows/).
+Windows will require a seperate [installation](https://itsfoss.com/install-bash-on-windows/).
 
 ### Installing
 
