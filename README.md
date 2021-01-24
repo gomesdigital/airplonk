@@ -41,7 +41,7 @@ cd AirPlonk
 The 'install_macos.sh' script will take care of putting files where they need to 
 be, but you'll need to install the project dependencies on your own. AirPlonk 
 will however list these for you if it detects any.
-(I do recommend to go the [Homebrew](https://www.howtogeek.com/211541/homebrew-for-os-x-easily-installs-desktop-apps-and-terminal-utilities/) route and use the instructions that are mentioned for it above.)
+(I recommend installing [Homebrew](https://www.howtogeek.com/211541/homebrew-for-os-x-easily-installs-desktop-apps-and-terminal-utilities/) and using the instructions that are mentioned for it instead.)
 
 #### Android-Termux 
 ```
