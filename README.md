@@ -122,3 +122,7 @@ Enjoy.
 
 [nmap]: https://github.com/nmap/nmap
 [rsync]: https://github.com/WayneD/rsync
+
+## TODO
+
+Implement functionality that accounts for transfers between known hosts, i.e. - transfers that do not require the user's login credentials. 
