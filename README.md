@@ -1,8 +1,8 @@
-# AirPlonk &nbsp;[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Just%20AirPlonk%20it.%20&url=https://github.com/daaanstraight/AirPlonk&via=daaanstraight&hashtags=bash,shell,rsync,ssh,developers)
+# AirPlonk &nbsp;[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Just%20AirPlonk%20it.%20&url=https://github.com/gomesdigital/AirPlonk&via=gomesdigital&hashtags=bash,shell,rsync,ssh,developers)
 
-![](https://img.shields.io/github/issues/daaanstraight/AirPlonk?color=yellow)
+![](https://img.shields.io/github/issues/gomesdigital/AirPlonk?color=yellow)
 ![](https://img.shields.io/github/languages/code-size/gomesdigital/AirPlonk?color=green)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/daaanstraight/AirPlonk/LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/gomesdigital/AirPlonk/LICENSE)
 
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
 
@@ -28,13 +28,13 @@ sudo dpkg -i airplonk_1.0.1_all.deb
 
 #### Homebrew
 ```
-brew tap daaanstraight/airplonk
+brew tap gomesdigital/airplonk
 brew install airplonk
 ```
 
 #### macOS
 ```
-git clone https://github.com/daaanstraight/AirPlonk
+git clone https://github.com/gomesdigital/AirPlonk
 cd AirPlonk
 ./install_macOS.sh
 ```
