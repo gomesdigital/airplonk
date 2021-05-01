@@ -21,9 +21,9 @@ Windows will require a seperate [installation](https://itsfoss.com/install-bash-
 ### Installing
 
 #### Debian (Mint, Ubuntu, Kali ...)
-Download this [.deb package](https://github.com/gomesdigital/AirPlonk/raw/main/airplonk_1.0.0_all.deb), then in the enclosing directory:
+Download this [.deb package](https://github.com/gomesdigital/AirPlonk/raw/main/airplonk_1.0.1_all.deb), then in the enclosing directory:
 ```
-sudo dpkg -i airplonk_1.0.0_all.deb
+sudo dpkg -i airplonk_1.0.1_all.deb
 ```
 
 #### Homebrew
