@@ -1,7 +1,7 @@
 # AirPlonk &nbsp;[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Just%20AirPlonk%20it.%20&url=https://github.com/daaanstraight/AirPlonk&via=daaanstraight&hashtags=bash,shell,rsync,ssh,developers)
 
 ![](https://img.shields.io/github/issues/daaanstraight/AirPlonk?color=yellow)
-![](https://img.shields.io/github/languages/code-size/daaanstraight/AirPlonk?color=green)
+![](https://img.shields.io/github/languages/code-size/gomesdigital/AirPlonk?color=green)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/daaanstraight/AirPlonk/LICENSE)
 
 Uses [nmap] and [rsync] to quickly identify nodes and push files to them over port 22.
@@ -21,7 +21,7 @@ Windows will require a seperate [installation](https://itsfoss.com/install-bash-
 ### Installing
 
 #### Debian (Mint, Ubuntu, Kali ...)
-Download this [.deb package](https://github.com/daaanstraight/AirPlonk/raw/main/airplonk_1.0.0_all.deb), then in the enclosing directory:
+Download this [.deb package](https://github.com/gomesdigital/AirPlonk/raw/main/airplonk_1.0.0_all.deb), then in the enclosing directory:
 ```
 sudo dpkg -i airplonk_1.0.0_all.deb
 ```
@@ -45,7 +45,7 @@ will however list these for you if it detects any.
 
 #### Android-Termux 
 ```
-git clone https://github.com/daaanstraight/AirPlonk
+git clone https://github.com/gomesdigital/AirPlonk
 cd AirPlonk
 ./install_termux.sh
 ```
@@ -99,9 +99,9 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 
 ## Author Info
 
-* **Daniel Gomes-Sebastiao** - *Initial work* - [daaanstraight](https://github.com/daaanstraight)
+* **Daniel Gomes-Sebastiao** - *Initial work* - [gomesdigital](https://github.com/gomesdigital)
 
-See also the list of [contributors](https://github.com/daaanstraight/AirPlonk/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/gomesdigital/AirPlonk/graphs/contributors) who participated in this project.
 
 ## Acknowledgements
 
