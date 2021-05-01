@@ -532,7 +532,7 @@ d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
  d8888888888 888       \e[34m.Wl .Nl    0     ;,    ,.\e[0m
 d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
 
-      [by https://github.com/daaanstraight]
+      [by https://github.com/gomesdigital]
 
 "
   sleep 1
@@ -569,7 +569,7 @@ function refresh() {
  d8888888888 888       \e[34m.Wl .Nl    0     ;,    ,.\e[0m
 d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
 
-      [by https://github.com/daaanstraight]
+      [by https://github.com/gomesdigital]
 
 "
     fi
