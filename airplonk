@@ -609,7 +609,7 @@ function help() {
    usage
 	 printf "\n\e[1mBUGS\e[0m\n"
 	 printf "       See our issues on GitHub: "
-   printf "https://github.com/daaanstraight/AirPlonk/issues\n\n"
+   printf "https://github.com/gomesdigital/AirPlonk/issues\n\n"
 	 printf "       If you have detected a bug, please open an issue on the GitHub page\n"
 	 printf "       linked above.\n"
 	 printf "\n\e[1mAUTHORS\e[0m\n"
@@ -658,14 +658,14 @@ function usage() {
 ################################################################################
 function support() {
 	printf "\nThank you for your support.\n\n"
-	printf "Follow this link: https://github.com/daaanstraight\n"
+	printf "Follow this link: https://github.com/gomesdigital\n"
 	printf "to support me with a star/follow on github. \n\n"
 	printf "Kind regards,\n"
 	printf "Daniel Gomes-Sebastiao"
 	# Termux and Linux
-	if ! xdg-open "https://github.com/daaanstraight" 2>/dev/null; then
+	if ! xdg-open "https://github.com/gomesdigital" 2>/dev/null; then
 			# MacOS
-      open "https://github.com/daaanstraight"
+      open "https://github.com/gomesdigital"
   fi
 }
 
