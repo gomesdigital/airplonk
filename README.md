@@ -114,7 +114,7 @@ After returning from a short road trip I wanted to dump some media from my andro
 
 Problem: 
 1. At the time my Hackintosh didn't have a configured bluetooth module. (And I wasn't even going to bother with Android File Transfer.)
-2. The files I was after were quite large. I wanted them now and I wasn't about to send them off to some server in Iceland just to re-download
+2. The files I were after were quite large. I wanted them now and I wasn't about to send them off to some server in Iceland just to re-download
    them to the same room. They were right here.
 
 My girlfriend said - "Just AirDrop it."
