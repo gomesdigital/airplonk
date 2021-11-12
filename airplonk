@@ -127,7 +127,6 @@ function find_nodes() {
   while IFS= read -r line; do
 		name="$(printf "%s\n" "${line}" | awk '{print $3}')"
 		name="${name:1:${#name}-2}"
-		name=""
 		ip="$(printf "%s\n" "${line}" | awk '{print $2}')"
 		# If nmap cannot resolve a hostname,
 		if [[ "${name}" == "" ]] && [[ "${ip}" != "" ]]; then
@@ -143,7 +142,6 @@ function find_nodes() {
 	# Supress stderr termination notification.
 	wait $SPINNER_PID 2>/dev/null;
 	printf "\n\n"
-
 	for (( i=0; i<"${#IPS[@]}"; i++ )); do
 		printf "%s\n" "$((i+1)). ${NAMES[i]} ${IPS[i]}"
 	done
