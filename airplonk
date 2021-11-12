@@ -18,7 +18,7 @@
 
 declare -r TITLE="AirPlonk"
 declare -r VERSION=1.0.2
-declare -r REVISION_DATE="January 2021"
+declare -r REVISION_DATE="November 2021"
 declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
                                   "printf" "rsync" "sed" "sleep" "stty" "tput"\
 																	"unbuffer" "xargs" "xdg-open")
@@ -609,7 +609,7 @@ function help() {
 	 printf "       If you have detected a bug, please open an issue on the GitHub page\n"
 	 printf "       linked above.\n"
 	 printf "\n\e[1mAUTHORS\e[0m\n"
-	 printf "       AirPlonk was originally written by Daniel Gomes-Sebastiao and and is\n"
+	 printf "       AirPlonk was originally written by Daniel Gomes-Sebastiao and is\n"
 	 printf "       currently maintained by Daniel Gomes-Sebastiao.\n\n"
 	 printf "\e[1mCOPYRIGHT\e[0m\n"
 	 printf "       AirPlonk Copyright (C) 2021 Daniel Gomes-Sebastiao\n"
