@@ -114,7 +114,7 @@ to start.
 #### Docker
 Running AirPlonk in Docker allows you to plonk files and folders between your running Docker containers.
 
-Ensure [Docker](https://docs.docker.com/get-docker/) is installed on your machine.
+First, ensure [Docker](https://docs.docker.com/get-docker/) is installed on your machine.
 
 Clone the repo:
 ```
@@ -132,7 +132,7 @@ Create the container from the image:
 ```
 sudo docker run -it --name mycontainer airplonk:latest
 ```
-Optional tag is `-d` to run the container in the background. You are able to enter a bash shell in the container and run airplonk from there to ste a different working directory:
+Optional tag is `-d` to run the container in the background. You are able to enter a bash shell in the container and run airplonk from there to set a different working directory:
 ```
 sudo docker run -d -it --name mycontainer airplonk:latest
 sudo docker exec -it mycontainer bash
