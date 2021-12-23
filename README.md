@@ -31,6 +31,24 @@ sudo apt-get -f install
 ```
 to resolve any missing dependencies.
 
+#### Red Hat (Fedora, RHEL, CentOS, ...)
+Clone the repo:
+```
+git glone https://github.com/gomesdigital/AirPlonk.git
+```
+Enter the AirPlonk directory:
+```
+cd airplonk
+```
+Make `install_rhel.sh` executable:
+```
+chmod +x install_rhel.sh
+```
+Then, execute the installation script:
+```
+./install_rhel.sh
+```
+
 #### Homebrew
 ```
 brew tap gomesdigital/airplonk
@@ -39,7 +57,7 @@ brew install airplonk
 
 #### macOS
 ```
-git clone https://github.com/gomesdigital/AirPlonk
+git clone https://github.com/gomesdigital/AirPlonk.git
 cd AirPlonk
 ./install_macOS.sh
 ```
@@ -50,7 +68,7 @@ will however list these for you if it detects any.
 
 #### Android-Termux 
 ```
-git clone https://github.com/gomesdigital/AirPlonk
+git clone https://github.com/gomesdigital/AirPlonk.git
 cd AirPlonk
 ./install_termux.sh
 ```
@@ -68,6 +86,39 @@ Run
 airplonk
 ```
 to start.
+
+#### Docker
+Running AirPlonk in Docker allows you to plonk files and folders between your running Docker containers.
+
+Ensure [Docker](https://docs.docker.com/get-docker/) is installed on your machine.
+
+Clone the repo:
+```
+git clone https://github.com/gomesdigital/airplonk.git
+```
+Enter the AirPlonk directory:
+```
+cd airplonk
+```
+Build the Docker image from the Dockerfile:
+```
+sudo docker build -t airplonk:latest .
+```
+Create the container from the image:
+```
+sudo docker run -it --name mycontainer airplonk:latest
+```
+Optional tag is `-d` to run the container in the background. You are able to enter a bash shell in the container and run airplonk from there to ste a different working directory:
+```
+sudo docker run -d -it --name mycontainer airplonk:latest
+sudo docker exec -it mycontainer bash
+```
+In the bash shell, ensure SSH is active:
+```
+service ssh start
+service ssh status
+```
+And set the directory you wish to use AirPlonk from (also check the other container's SSH is active).
 
 ## Demo
 AirPlonk pushes your current working directory to the target node of your choosing.
