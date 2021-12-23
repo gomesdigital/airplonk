@@ -18,6 +18,30 @@ On Linux, macOS and Termux this is available by default.
 
 Windows will require a seperate [installation](https://itsfoss.com/install-bash-on-windows/).
 
+#### Setting up SSH using OpenSSH
+
+In order to view available nodes and plonk, a SSH instance has to be running on both the host machine and the machine you wish to plonk to.
+
+[OpenSSH](https://www.openssh.com) offers one solution. To install it, ensure your packages are up-to-date and install `openssh-server` and `openssh-client` (on Termux and other applicables, install `openssh`). Debian is shown for reference:
+```
+sudo apt update
+sudo apt install openssh-client openssh-server
+```
+Then, start the SSH and SSH daemon instances:
+```
+sudo systemctl start ssh
+sudo systemctl start sshd
+```
+Check they are active using `status`:
+```
+sudo systemctl status ssh
+sudo systemctl status sshd
+```
+On Termux, SSH can be started by simply running:
+```
+sshd
+```
+
 ### Installing
 
 #### Debian (Mint, Ubuntu, Kali ...)
