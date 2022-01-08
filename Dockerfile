@@ -9,6 +9,9 @@ WORKDIR /AirPlonk
 COPY . /usr/bin
 COPY doc/airplonk.1 /usr/share/man/man1
 
+EXPOSE 22
+EXPOSE 8022
+
 RUN service ssh start
 
 CMD /bin/bash airplonk
