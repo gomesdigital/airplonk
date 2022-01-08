@@ -36,6 +36,7 @@ declare -i SPINNER_PID  # PID of the 'looking for nodes...' spinner process.
 declare -i COLUMNS      # Number of columns of the terminal window. (declare
 COLUMNS="$(tput cols)"  # and assign seperately to avoid masking return values)
 declare os="$OSTYPE"    # Determine environment.
+PORT=22                 # Set port to 22 by default
 
 # Begin logic
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -136,7 +137,7 @@ function find_nodes() {
 		fi
 		IPS+=("${ip}")
 		NAMES+=("${name}")
-  done < <(nmap -p 22 -oG - "${HOST_IP}"/24 2>/dev/null | grep 22/open)
+  done < <(nmap -p "${PORT}" -oG - "${HOST_IP}"/24 2>/dev/null | grep "${PORT}"/open)
 
   kill $SPINNER_PID
 	# Supress stderr termination notification.
@@ -249,7 +250,7 @@ function transmit() {
   destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
 	printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> "
 	read -r username; printf "\n"
-	rsync -a --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2 "$PWD/"\
+	rsync -a -e 'ssh -p "${PORT}"' --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2 "$PWD/"\
    "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
 	  | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
 }
@@ -727,6 +728,9 @@ function main() {
 				;;
 			"-b")
 			  :
+				;;
+                        "-a")
+			  PORT=8022
 				;;
 			*)
 			  printf "\nairplonk: illegal option %s\n\n" "\'$ARG\'"
