@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 #
 #  Push your current directory to SSH-able nodes in your local net.
 #
@@ -36,6 +36,7 @@ declare -i SPINNER_PID  # PID of the 'looking for nodes...' spinner process.
 declare -i COLUMNS      # Number of columns of the terminal window. (declare
 COLUMNS="$(tput cols)"  # and assign seperately to avoid masking return values)
 declare os="$OSTYPE"    # Determine environment.
+declare -i PORT
 PORT=22                 # Set port to 22 by default
 
 # Begin logic
@@ -98,10 +99,7 @@ function get_host_ip() {
   if [[ $OS == 'gnu' ]]; then
     HOST_IP="$(hostname -I | awk '{print $1}')"
   else
-    HOST_IP=$(ifconfig 2>/dev/null \
-	  | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' \
-	  | grep -Eo '([0-9]*\.){3}[0-9]*' \
-	  | grep -v '127.0.0.1')
+    HOST_IP=$(ip addr show wlan0|grep inet|grep -v inet6|awk '{print $2}'|awk '{split($0,a,"/"); print a[1]}')
   fi
 }
 
@@ -250,8 +248,9 @@ function transmit() {
   destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
 	printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> "
 	read -r username; printf "\n"
-	rsync -a -e 'ssh -p "${PORT}"' --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2 "$PWD/"\
-   "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
+	rsync -aP -e "ssh -p $PORT" --rsync-path="mkdir -p /$HOME/AirPlonks/ && rsync" "${current_dir}"/ \
+
+   "${username}"@"${IPS[$((TARGET_NODE - 1))]}":/$HOME/AirPlonks/"${destination}" \
 	  | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
 }
 
@@ -639,6 +638,7 @@ function usage() {
 	printf "\e[1mSYNOPSIS\e[0m\n"
 	printf "       airplonk [OPTION]\n\n"
 	printf "\e[1mOPTIONS\e[0m\n"
+	printf "\e[1m-a\e[0m Search for non-root Android devices over port 8022.\n"
 	printf "       \e[1m-b\e[0m  Run without banner.\n"
 	printf "       \e[1m-h\e[0m  Print this help menu.\n"
 	printf "       \e[1m-s\e[0m  Support me on github with a follow or star.\n"
@@ -729,7 +729,7 @@ function main() {
 			"-b")
 			  :
 				;;
-                        "-a")
+                        "-a" | "--android")
 			  PORT=8022
 				;;
 			*)
