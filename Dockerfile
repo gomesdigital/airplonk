@@ -1,7 +1,7 @@
 FROM debian:latest
 
-RUN apt update > /dev/null 2>&1
-RUN apt install -y expect hostname nano net-tools nmap openssh-server openssh-client rsync xdg-utils > /dev/null 2>&1
+RUN apt update && apt upgrade -y
+RUN apt install -y expect hostname vim net-tools nmap openssh-server openssh-client rsync xdg-utils
 RUN apt autoremove -y && rm -rf /var/lib/apt/lists/* > /dev/null 2>&1
 
 WORKDIR /AirPlonk
