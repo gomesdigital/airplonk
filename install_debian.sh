@@ -16,7 +16,7 @@
 #
 #   Done.
 
-sudo apt install expect hostname net-tools nmap rsync xdg-utils 
+sudo apt install expect hostname net-tools nmap rsync xdg-utils -y
 
 cp airplonk /usr/bin
 cp doc/airplonk.1 /usr/share/man/man1

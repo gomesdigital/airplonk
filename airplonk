@@ -98,8 +98,18 @@ function check_dependencies() {
 function get_host_ip() {
   if [[ $OS == 'gnu' ]]; then
     HOST_IP="$(hostname -I | awk '{print $1}')"
+  elif [[ $OS == 'android-linux' ]]; then
+    HOST_IP=$(ip addr show wlan0 \ 
+        | grep inet \
+        | grep -v inet6\ 
+        | awk '{print $2}' \ 
+        | awk '{split($0,a,"/"); print a[1]}')
   else
-    HOST_IP=$(ip addr show wlan0|grep inet|grep -v inet6|awk '{print $2}'|awk '{split($0,a,"/"); print a[1]}')
+    HOST_IP=$(ifconfig 2>/dev/null \
+           | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' \
+           | grep -Eo '([0-9]*\.){3}[0-9]*' \
+           | grep -v '127.0.0.1')
+
   fi
 }
 
@@ -253,6 +263,20 @@ function transmit() {
    "${username}"@"${IPS[$((TARGET_NODE - 1))]}":/$HOME/AirPlonks/"${destination}" \
 	  | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
 }
+
+function transmit() {
+    printf "\n"
+    current_dir="$PWD"
+    local timestamp
+    timestamp="$(date +"%D" | sed 's/^\///;s/\//-/g') $(date +"%T")"
+    local destination="${current_dir##*/} $timestamp"
+    destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
+    printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> " 
+    read -r username; printf "\n"
+    rsync -a -e "ssh -p $PORT" --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2     "$PWD/"\
+        "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
+        | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
+ }
 
 ################################################################################
 # Handle unexpected script termination. (cntrl-c or similar)
