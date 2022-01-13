@@ -97,10 +97,10 @@ function check_dependencies() {
 ################################################################################
 function get_host_ip() {
     echo "$(uname -s)" # Print for debugging
-    echo "$(uname -o)" # Print for debugginh
+    echo "$(uname -o)" # Print for debugging
     if [[ $OS == "Linux" ]]; then # Check using "hostname -I" if GNU/Linux
         if [[ "$(uname -o)" == 'GNU/Linux' ]]; then
-            HOST_IP="$(hostname -I | awk '{print $1}')"
+            HOST_IP=$(hostname -I | awk '{print $1}')
         else # Use "ip addr" if Android
             HOST_IP=$(ip addr show wlan0 \ 
                 | grep inet \
@@ -114,7 +114,7 @@ function get_host_ip() {
             | grep -Eo '([0-9]*\.){3}[0-9]*' \
             | grep -v '127.0.0.1')
 
-  fi
+    fi
 }
 
 ################################################################################
