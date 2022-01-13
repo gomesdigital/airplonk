@@ -102,11 +102,7 @@ function get_host_ip() {
         if [[ "$(uname -o)" == 'GNU/Linux' ]]; then
             HOST_IP=$(hostname -I | awk '{print $1}')
         else # Use "ip addr" if Android
-            HOST_IP=$(ip addr show wlan0 \ 
-                | grep inet \
-                | grep -v inet6 \ 
-                | awk '{print $2}' \ 
-                | awk '{split($0,a,"/"); print a[1]}')
+            HOST_IP=$(ip addr show wlan0 | grep inet | grep -v inet6 | awk '{print $2}' | awk '{split($0,a,"/"); print a[1]}')
         fi
     else # Otherwise, try ifconfig if Darwin (MacOS)
         HOST_IP=$(ifconfig 2>/dev/null \
