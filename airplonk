@@ -96,8 +96,6 @@ function check_dependencies() {
 #   None
 ################################################################################
 function get_host_ip() {
-    echo "$(uname -s)" # Print for debugging
-    echo "$(uname -o)" # Print for debugging
     if [[ $OS == "Linux" ]]; then # Check using "hostname -I" if GNU/Linux
         if [[ "$(uname -o)" == 'GNU/Linux' ]]; then
             HOST_IP=$(hostname -I | awk '{print $1}')

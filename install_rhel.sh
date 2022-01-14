@@ -16,7 +16,7 @@
 #
 #   Done.
 
-sudo dnf install expect hostname net-tools nmap rsync xdg-utils
+sudo yum install expect hostname net-tools nmap rsync xdg-utils -y
 
 sudo cp airplonk /usr/bin
 sudo cp doc/airplonk.1 /usr/share/man/man1
