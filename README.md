@@ -64,11 +64,13 @@ Enter the AirPlonk directory:
 ```
 cd airplonk
 ```
-Make `install_rhel.sh` executable:
+If in an non-Fedora RHEL, make `install_rhel.sh` executable:
 ```
 chmod +x install_rhel.sh
 ```
-Then, execute the installation script:
+Otherwise, make `install_fedora.sh` (`install_rhel.sh` using `yum` whereas `install_fedora.sh` uses `dnf` as its package manager).
+
+Then, execute the installation script for either `install_rhel` or `install_fedora`:
 ```
 ./install_rhel.sh
 ```
@@ -98,6 +100,7 @@ cd AirPlonk
 ```
 The 'install_termux.sh' script will take care of installing the necessary 
 dependencies.<br/>
+
 Note: Try 'bash airplonk' to run if you don't have root permission.
 
 #### Windows & Otherwise
@@ -111,7 +114,13 @@ airplonk
 ```
 to start.
 
-#### Docker
+Note: If plonking _to_ an non-rooted Android device, use the tag `-a` or `--android`
+```
+airplonk -a # --android
+```
+to plonk over port 8022.
+
+#### Docker (EXPERIMENTAL)
 Running AirPlonk in Docker allows you to plonk files and folders between your running Docker containers.
 
 First, ensure [Docker](https://docs.docker.com/get-docker/) is installed on your machine.
@@ -130,11 +139,11 @@ sudo docker build -t airplonk:latest .
 ```
 Create the container from the image:
 ```
-sudo docker run -it --name mycontainer airplonk:latest
+sudo docker run -ti --name mycontainer airplonk:latest
 ```
 Optional tag is `-d` to run the container in the background. You are able to enter a bash shell in the container and run airplonk from there to set a different working directory:
 ```
-sudo docker run -d -it --name mycontainer airplonk:latest
+sudo docker run -d -ti --name mycontainer airplonk:latest
 sudo docker exec -it mycontainer bash
 ```
 In the bash shell, ensure SSH is active:

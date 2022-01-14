@@ -5,10 +5,10 @@
 # How to use it:
 #
 #   Step 1 - Grant the script executable permission.
-#     run 'chmod +x install_rhel.sh'
+#     run 'chmod +x install_fedora.sh'
 #
 #   Step 2 - Execute the script.
-#     run './install_rhel.sh'
+#     run './install_fedora.sh'
 #
 #   Step 3 - Enter your password.
 #
@@ -16,7 +16,7 @@
 #
 #   Done.
 
-sudo yum install expect hostname net-tools nmap rsync xdg-utils -y
+sudo dnf install expect hostname net-tools nmap rsync xdg-utils -y
 
 sudo cp airplonk /usr/bin
 sudo cp doc/airplonk.1 /usr/share/man/man1
