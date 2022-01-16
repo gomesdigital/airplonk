@@ -645,7 +645,7 @@ function usage() {
 	printf "\e[1mSYNOPSIS\e[0m\n"
 	printf "       airplonk [OPTION]\n\n"
 	printf "\e[1mOPTIONS\e[0m\n"
-	printf "\e[1m-a\e[0m Search for non-root Android devices over port 8022.\n"
+	printf "       \e[1m-a\e[0m  Search for non-root Android devices over port 8022.\n"
 	printf "       \e[1m-b\e[0m  Run without banner.\n"
 	printf "       \e[1m-h\e[0m  Print this help menu.\n"
 	printf "       \e[1m-s\e[0m  Support me on github with a follow or star.\n"
