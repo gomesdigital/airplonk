@@ -68,7 +68,7 @@ If in an non-Fedora RHEL, make `install_rhel.sh` executable:
 ```
 chmod +x install_rhel.sh
 ```
-Otherwise, make `install_fedora.sh` (`install_rhel.sh` using `yum` whereas `install_fedora.sh` uses `dnf` as its package manager).
+Otherwise, make `install_fedora.sh` (`install_rhel.sh` uses `yum`, whereas `install_fedora.sh` uses `dnf` as its package manager).
 
 Then, execute the installation script for either `install_rhel` or `install_fedora`:
 ```

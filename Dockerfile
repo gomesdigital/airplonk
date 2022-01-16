@@ -13,6 +13,6 @@ EXPOSE 22
 EXPOSE 8022
 
 RUN service ssh start
-RUN ufw allow 2001,2002
+RUN ufw allow 22,8022
 
 CMD /bin/bash airplonk
