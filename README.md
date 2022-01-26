@@ -77,39 +77,6 @@ airplonk -a # --android
 ```
 to plonk over port 8022.
 
-#### Docker (EXPERIMENTAL)
-Running AirPlonk in Docker allows you to plonk files and folders between your running Docker containers.
-
-First, ensure [Docker](https://docs.docker.com/get-docker/) is installed on your machine.
-
-Clone the repo:
-```
-git clone https://github.com/gomesdigital/airplonk.git
-```
-Enter the AirPlonk directory:
-```
-cd airplonk
-```
-Build the Docker image from the Dockerfile:
-```
-sudo docker build -t airplonk:latest .
-```
-Create the container from the image:
-```
-sudo docker run -ti --name mycontainer airplonk:latest
-```
-Optional tag is `-d` to run the container in the background. You are able to enter a bash shell in the container and run airplonk from there to set a different working directory:
-```
-sudo docker run -d -ti --name mycontainer airplonk:latest
-sudo docker exec -it mycontainer bash
-```
-In the bash shell, ensure SSH is active:
-```
-service ssh start
-service ssh status
-```
-And set the directory you wish to use AirPlonk from (also check the other container's SSH is active).
-
 ## Demo
 AirPlonk pushes your current working directory to the target node of your choosing.
 
