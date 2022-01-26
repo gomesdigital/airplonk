@@ -18,10 +18,10 @@
 
 PACKAGES='expect hostname net-tools nmap rsync xdg-utils'
 
-if [ -x "$(command -v apk)" ]; then 
-    sudo apk add --no-cache $PACKAGES
-    cp airplonk /usr/bin
-    cp doc/airplonk.1 /usr/share/man/man1
+if [ -x "$(command -v pkg)" ]; then 
+    pkg install expect nmap ncurses-utils rsync
+    cp airplonk /data/data/com.termux/files/usr/bin
+    cp doc/airplonk.1 /data/data/com.termux/files/usr/share/man/man1
 elif [ -x "$(command -v apt-get)" ]; then 
     sudo apt install $PACKAGES
     cp airplonk /usr/bin
@@ -42,10 +42,10 @@ elif [ -x "$(command -v pacman)" ]; then
     sudo pacman -Syu $PACKAGES
     cp airplonk /usr/bin
     cp doc/airplonk.1 /usr/share/man/man1
-elif [ -x "$(command -v pkg)" ]; then
-    pkg install expect nmap ncurses-utils rsync
-    cp airplonk /data/data/com.termux/files/usr/bin
-    cp doc/airplonk.1 /data/data/com.termux/files/usr/share/man/man1
+elif [ -x "$(command -v apk)" ]; then
+    sudo apk add --no-cache $PACKAGES
+    cp airplonk /usr/bin
+    cp doc/airplonk.1 /usr/share/man/man1
 else 
     echo "FAILED TO INSTALL PACKAGES: Package manager not found. You must manually install: $PACKAGES">&2; 
 fi
