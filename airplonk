@@ -96,13 +96,16 @@ function check_dependencies() {
 #   None
 ################################################################################
 function get_host_ip() {
-    if [[ $OS == "Linux" ]]; then # Check using "hostname -I" if GNU/Linux
+    # Check using "hostname -I" if GNU/Linux
+    if [[ $OS == "Linux" ]]; then 
         if [[ "$(uname -o)" == 'GNU/Linux' ]]; then
             HOST_IP=$(hostname -I | awk '{print $1}')
-        else # Use "ip addr" if Android
+        # Use "ip addr" if Android
+        else 
             HOST_IP=$(ip addr show wlan0 | grep inet | grep -v inet6 | awk '{print $2}' | awk '{split($0,a,"/"); print a[1]}')
         fi
-    else # Otherwise, try ifconfig if Darwin (MacOS)
+        # Otherwise, try ifconfig if Darwin (MacOS)
+    else 
         HOST_IP=$(ifconfig 2>/dev/null \
             | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' \
             | grep -Eo '([0-9]*\.){3}[0-9]*' \

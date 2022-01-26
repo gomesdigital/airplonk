@@ -22,58 +22,26 @@ Windows will require a seperate [installation](https://itsfoss.com/install-bash-
 
 In order to view available nodes and plonk, a SSH instance has to be running on both the host machine and the machine you wish to plonk to.
 
-[OpenSSH](https://www.openssh.com) offers one solution. To install it, ensure your packages are up-to-date and install `openssh-server` and `openssh-client` (on Termux and other applicables, install `openssh`). Debian is shown for reference:
-```
-sudo apt update
-sudo apt install openssh-client openssh-server
-```
-Then, start the SSH and SSH daemon instances:
-```
-sudo systemctl start ssh
-sudo systemctl start sshd
-```
-Check they are active using `status`:
-```
-sudo systemctl status ssh
-sudo systemctl status sshd
-```
-On Termux, SSH can be started by simply running:
-```
-sshd
-```
+There are a number of ways to set this up depending on your system. Refer to `airplonk -h` for further information on setting up SSH.
 
 ### Installing
+#### Linux
+Run the following to detect your package manager and install the following packages:
 
-#### Debian (Mint, Ubuntu, Kali ...)
-Download this [.deb package](https://github.com/gomesdigital/AirPlonk/raw/main/airplonk_1.0.1_all.deb), then in the enclosing directory run:
-```
-sudo dpkg -i airplonk_1.0.1_all.deb
-```
-then
-```
-sudo apt-get -f install
-```
-to resolve any missing dependencies.
+- expect
+- hostname
+- net-tools
+- nmap
+- rsync
+- xdg-utils
 
-#### Red Hat (Fedora, RHEL, CentOS, ...)
-Clone the repo:
 ```
-git glone https://github.com/gomesdigital/AirPlonk.git
-```
-Enter the AirPlonk directory:
-```
+git clone https://github.com/gomesdigital/airplonk.git
 cd airplonk
+chmod +x install_airplonk.sh
+./install_airplonk.sh
 ```
-If in an non-Fedora RHEL, make `install_rhel.sh` executable:
-```
-chmod +x install_rhel.sh
-```
-Otherwise, make `install_fedora.sh` (`install_rhel.sh` uses `yum`, whereas `install_fedora.sh` uses `dnf` as its package manager).
-
-Then, execute the installation script for either `install_rhel` or `install_fedora`:
-```
-./install_rhel.sh
-```
+If it cannot detect your package manager, you may have to install any missing dependencies manually.
 
 #### Homebrew
 ```
@@ -91,17 +59,6 @@ The 'install_macos.sh' script will take care of putting files where they need to
 be, but you'll need to install the project dependencies on your own. AirPlonk 
 will however list these for you if it detects any.
 (I recommend installing [Homebrew](https://www.howtogeek.com/211541/homebrew-for-os-x-easily-installs-desktop-apps-and-terminal-utilities/) and using the instructions that are mentioned for it instead.)
-
-#### Android-Termux 
-```
-git clone https://github.com/gomesdigital/AirPlonk.git
-cd AirPlonk
-./install_termux.sh
-```
-The 'install_termux.sh' script will take care of installing the necessary 
-dependencies.<br/>
-
-Note: Try 'bash airplonk' to run if you don't have root permission.
 
 #### Windows & Otherwise
 Clone this project. The 'airplonk' file contains all the logic and the man
