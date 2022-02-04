@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 #
 #  Push your current directory to SSH-able nodes in your local net.
 #
@@ -35,7 +35,9 @@ declare -i ERR_COUNT=0  # Number of times 0 nodes where discovered.
 declare -i SPINNER_PID  # PID of the 'looking for nodes...' spinner process.
 declare -i COLUMNS      # Number of columns of the terminal window. (declare
 COLUMNS="$(tput cols)"  # and assign seperately to avoid masking return values)
-declare os="$OSTYPE"    # Determine environment.
+declare OS="$(uname -s)"    # Determine environment.
+declare -i PORT
+PORT=22                 # Set port to 22 by default
 
 # Begin logic
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -94,14 +96,22 @@ function check_dependencies() {
 #   None
 ################################################################################
 function get_host_ip() {
-  if [[ $OS == 'gnu' ]]; then
-    HOST_IP="$(hostname -I | awk '{print $1}')"
-  else
-    HOST_IP=$(ifconfig 2>/dev/null \
-	  | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' \
-	  | grep -Eo '([0-9]*\.){3}[0-9]*' \
-	  | grep -v '127.0.0.1')
-  fi
+    # Check using "hostname -I" if GNU/Linux
+    if [[ $OS == "Linux" ]]; then 
+        if [[ "$(uname -o)" == 'GNU/Linux' ]]; then
+            HOST_IP=$(hostname -I | awk '{print $1}')
+        # Use "ip addr" if Android
+        else 
+            HOST_IP=$(ip addr show wlan0 | grep inet | grep -v inet6 | awk '{print $2}' | awk '{split($0,a,"/"); print a[1]}')
+        fi
+        # Otherwise, try ifconfig if Darwin (MacOS)
+    else 
+        HOST_IP=$(ifconfig 2>/dev/null \
+            | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' \
+            | grep -Eo '([0-9]*\.){3}[0-9]*' \
+            | grep -v '127.0.0.1')
+
+    fi
 }
 
 ################################################################################
@@ -136,7 +146,7 @@ function find_nodes() {
 		fi
 		IPS+=("${ip}")
 		NAMES+=("${name}")
-  done < <(nmap -p 22 -oG - "${HOST_IP}"/24 2>/dev/null | grep 22/open)
+  done < <(nmap -p "${PORT}" -oG - "${HOST_IP}"/24 2>/dev/null | grep "${PORT}"/open)
 
   kill $SPINNER_PID
 	# Supress stderr termination notification.
@@ -241,18 +251,18 @@ function choose_target() {
 #   Reads username and password for the target node  from stdin.
 ################################################################################
 function transmit() {
-	printf "\n"
-  current_dir="$PWD"
-  local timestamp
-  timestamp="$(date +"%D" | sed 's/^\///;s/\//-/g') $(date +"%T")"
-  local destination="${current_dir##*/} $timestamp"
-  destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
-	printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> "
-	read -r username; printf "\n"
-	rsync -a --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2 "$PWD/"\
-   "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
-	  | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
-}
+    printf "\n"
+    current_dir="$PWD"
+    local timestamp
+    timestamp="$(date +"%D" | sed 's/^\///;s/\//-/g') $(date +"%T")"
+    local destination="${current_dir##*/} $timestamp"
+    destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
+    printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> " 
+    read -r username; printf "\n"
+    rsync -a -e "ssh -p $PORT" --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2     "$PWD/"\
+        "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
+        | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
+ }
 
 ################################################################################
 # Handle unexpected script termination. (cntrl-c or similar)
@@ -638,6 +648,7 @@ function usage() {
 	printf "\e[1mSYNOPSIS\e[0m\n"
 	printf "       airplonk [OPTION]\n\n"
 	printf "\e[1mOPTIONS\e[0m\n"
+	printf "       \e[1m-a\e[0m  Search for non-root Android devices over port 8022.\n"
 	printf "       \e[1m-b\e[0m  Run without banner.\n"
 	printf "       \e[1m-h\e[0m  Print this help menu.\n"
 	printf "       \e[1m-s\e[0m  Support me on github with a follow or star.\n"
@@ -728,6 +739,9 @@ function main() {
 			"-b")
 			  :
 				;;
+            "-a" | "--android")
+			  PORT=8022
+				;;
 			*)
 			  printf "\nairplonk: illegal option %s\n\n" "\'$ARG\'"
 				usage
@@ -740,19 +754,14 @@ function main() {
 		small_banner
 	fi
 
-	local os="$OSTYPE"
+    local os="$(uname -s)"
   case "$os" in
-		*"gnu"*)
-      OS='gnu'
+		*"Linux"*)
 		  check_dependencies "${LINUX_DEPENDENCIES[*]}"
 			;;
 		*"darwin"*)
-      OS='darwin'
 		  check_dependencies "${MACOS_DEPENDENCIES[*]}"
 			;;
-		*"android"*)
-		  check_dependencies "${LINUX_DEPENDENCIES[*]}"
-		  ;;
 	esac
 
 	printf "Cargo directory: %s\n\n" "${PWD##*/}";

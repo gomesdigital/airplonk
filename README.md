@@ -18,18 +18,30 @@ On Linux, macOS and Termux this is available by default.
 
 Windows will require a seperate [installation](https://itsfoss.com/install-bash-on-windows/).
 
-### Installing
+#### Setting up SSH using OpenSSH
 
-#### Debian (Mint, Ubuntu, Kali ...)
-Download this [.deb package](https://github.com/gomesdigital/AirPlonk/raw/main/airplonk_1.0.1_all.deb), then in the enclosing directory run:
+In order to view available nodes and plonk, a SSH instance has to be running on both the host machine and the machine you wish to plonk to.
+
+There are a number of ways to set this up depending on your system. Refer to `airplonk -h` for further information on setting up SSH.
+
+### Installing
+#### Linux
+Run the following to detect your package manager and install the following packages:
+
+- expect
+- hostname
+- net-tools
+- nmap
+- rsync
+- xdg-utils
+
 ```
-sudo dpkg -i airplonk_1.0.1_all.deb
+git clone https://github.com/gomesdigital/airplonk.git
+cd airplonk
+chmod +x install_airplonk.sh
+./install_airplonk.sh
 ```
-then
-```
-sudo apt-get -f install
-```
-to resolve any missing dependencies.
+If it cannot detect your package manager, you may have to install any missing dependencies manually.
 
 #### Homebrew
 ```
@@ -39,7 +51,7 @@ brew install airplonk
 
 #### macOS
 ```
-git clone https://github.com/gomesdigital/AirPlonk
+git clone https://github.com/gomesdigital/AirPlonk.git
 cd AirPlonk
 ./install_macOS.sh
 ```
@@ -47,16 +59,6 @@ The 'install_macos.sh' script will take care of putting files where they need to
 be, but you'll need to install the project dependencies on your own. AirPlonk 
 will however list these for you if it detects any.
 (I recommend installing [Homebrew](https://www.howtogeek.com/211541/homebrew-for-os-x-easily-installs-desktop-apps-and-terminal-utilities/) and using the instructions that are mentioned for it instead.)
-
-#### Android-Termux 
-```
-git clone https://github.com/gomesdigital/AirPlonk
-cd AirPlonk
-./install_termux.sh
-```
-The 'install_termux.sh' script will take care of installing the necessary 
-dependencies.<br/>
-Note: Try 'bash airplonk' to run if you don't have root permission.
 
 #### Windows & Otherwise
 Clone this project. The 'airplonk' file contains all the logic and the man
@@ -68,6 +70,12 @@ Run
 airplonk
 ```
 to start.
+
+Note: If plonking _to_ an non-rooted Android device, use the tag `-a` or `--android`
+```
+airplonk -a # --android
+```
+to plonk over port 8022.
 
 ## Demo
 AirPlonk pushes your current working directory to the target node of your choosing.
