@@ -22,9 +22,10 @@ declare -r REVISION_DATE="November 2021"
 declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
                                   "printf" "rsync" "sed" "sleep" "stty" "tput"\
 																	"unbuffer" "xargs" "xdg-open")
-declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig" "nmap"\
-                                  "open" "printf" "rsync" "sed" "sleep" "stty"\
-                                  "tput" "unbuffer" "xargs")
+declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig"\ 
+                                  "ipconfig" "nmap"\ "open" "printf" "rsync"\
+                                  "sed" "sleep" "stty" "tput" "unbuffer"\ 
+                                  "xargs")
 
 declare ARG             # Optional arg value from runtime.
 declare -a NAMES=()     # Discovered hostnames.
@@ -106,11 +107,7 @@ function get_host_ip() {
         fi
         # Otherwise, try ifconfig if Darwin (MacOS)
     else 
-        HOST_IP=$(ifconfig 2>/dev/null \
-            | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' \
-            | grep -Eo '([0-9]*\.){3}[0-9]*' \
-            | grep -v '127.0.0.1')
-
+        HOST_IP=$(ipconfig getifaddr en0)
     fi
 }
 
