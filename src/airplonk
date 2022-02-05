@@ -1,0 +1,361 @@
+#!/bin/bash
+#
+#  Push your current directory to SSH-able nodes in your local net.
+#
+#  Copyright (C) 2021 Daniel Gomes-Sebastiao
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+source ./doc/manual
+source ./animations
+
+declare -r TITLE="AirPlonk"
+declare -r VERSION=1.0.2
+declare -r REVISION_DATE="November 2021"
+declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
+                                  "printf" "rsync" "sed" "sleep" "stty" "tput"\
+                                  "unbuffer" "xargs" "xdg-open")
+declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig"\
+                                  "ipconfig" "nmap" "open" "printf" "rsync"\
+                                  "sed" "sleep" "stty" "tput" "unbuffer"\
+                                  "xargs")
+declare ARG             # Optional arg value from runtime.
+declare -a NAMES=()     # Discovered hostnames.
+declare -a IPS=()       # Discovered IP addresses.
+declare HOST_IP         # Host IP address.
+declare TARGET_NODE     # An indice, representing the target node.
+declare -i ERR_COUNT=0  # Number of times 0 nodes where discovered.
+declare -i SPINNER_PID  # PID of the 'looking for nodes...' spinner process.
+declare -i COLUMNS      # Number of columns of the terminal window. (declare
+COLUMNS="$(tput cols)"  # and assign seperately to avoid masking return values)
+declare OS              # Environment specification.
+OS="$(uname -s)"
+declare -i PORT         # The target port to scan for.
+PORT=22
+
+# Begin logic
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+################################################################################
+# Determine missing dependencies.
+# Globals:
+#   None
+# Arguments:
+#   An array of dependencies according to the detected OS.
+# Outputs:
+#   Lists missing dependencies to stdout.
+################################################################################
+function check_dependencies() {
+  local dependencies=("$@")
+  local missing_dependencies=()
+  for dependency in ${dependencies[*]}; do
+    if ! [[ $(which "$dependency") ]]; then
+      missing_dependencies+=("${dependency}")
+    fi
+  done
+
+  if [[ "${missing_dependencies[*]}" != "" ]]; then
+    printf "You are missing the following dependencies: \n"
+    for missing_dependency in ${missing_dependencies[*]}; do
+      printf -- " - %s\n" "$missing_dependency"
+    done
+    printf "\nPlease install them to use AirPlonk."
+    exit
+  fi
+
+  if [[ $(which "rsync") ]]; then
+    local rsync_version
+    rsync_version=$(rsync --version | grep version | awk '{print $3}')
+    local rsync_major
+    rsync_major=$(printf "%s" "$rsync_version" | cut -c1-3 | cut -c1-1)
+    local rsync_minor="${rsync_major: -1}"
+    if [[ $rsync_major -ge 3 ]]; then
+      if [[ $rsync_minor -le 1 ]]; then
+        printf "You are using rsync version%s\n" "$rsync_version"
+        printf "Please upgrade to rsync version 3.1 or higher to use AirPlonk."
+        exit
+      fi
+    else
+      printf "You are using rsync version%s\n" "$rsync_version"
+      printf "Please upgrade to rsync version 3.1 or higher to use AirPlonk."
+      exit
+    fi
+  fi
+}
+
+################################################################################
+# Get the IP of the local host.
+# Globals:
+#   HOST_IP
+# Arguments:
+#   None
+################################################################################
+function get_host_ip() {
+    # Check using "hostname -I" if GNU/Linux
+    if [[ $OS == "Linux" ]]; then
+        if [[ "$(uname -o)" == 'GNU/Linux' ]]; then
+            HOST_IP=$(hostname -I | awk '{print $1}')
+        # Use "ip addr" if Android
+        else
+            HOST_IP=$(ip addr show wlan0 | grep inet | grep -v inet6 | awk '{print $2}' | awk '{split($0,a,"/"); print a[1]}')
+        fi
+        # Otherwise, try ifconfig if Darwin (MacOS)
+    else
+        HOST_IP=$(ipconfig getifaddr en0)
+    fi
+}
+
+################################################################################
+# Search for nodes on the local net that have port 22 open using nmap and
+# parse the output.
+# Globals:
+#   NAMES
+#   IPS
+#   SPINNER_PID
+# Arguments:
+#   None
+# Outputs:
+#   Lists node names and their IP's to stdout.
+################################################################################
+function find_nodes() {
+  # Get local ip everytime. (in case of switching networks)
+  get_host_ip
+  # Provide some feedback during the net scan process.
+  scan_spin &
+  # Store the PID of the previous command. (scan_spin)
+  SPINNER_PID=$!
+  # Execute the net scan and populate arrays.
+  while IFS= read -r line; do
+    name="$(printf "%s\n" "${line}" | awk '{print $3}')"
+    name="${name:1:${#name}-2}"
+    ip="$(printf "%s\n" "${line}" | awk '{print $2}')"
+    # If nmap cannot resolve a hostname,
+    if [[ "${name}" == "" ]]\
+    && [[ "${ip}" != "" ]]; then
+      # try find it with arp.
+      name="$(arp "${ip}" | awk '{print $1}' | tr -d '\n')"
+      name=${name#"Address"}
+    fi
+    IPS+=("${ip}")
+    NAMES+=("${name}")
+  done < <(nmap -p "${PORT}" -oG - "${HOST_IP}"/24 | grep "${PORT}"/open)
+
+  kill $SPINNER_PID
+  # Supress stderr termination notification.
+  wait $SPINNER_PID 2>/dev/null;
+  printf "\n\n"
+  for (( i=0; i<"${#IPS[@]}"; i++ )); do
+  printf "%s\n" "$((i+1)). ${NAMES[i]} ${IPS[i]}"
+  done
+
+  choose_target
+}
+
+################################################################################
+# Prompt the user to select a target node.
+# Globals:
+#   NAMES
+#   IPS
+#   TARGET_NODE
+# Arguments:
+#   None
+# Output:
+#   Writes the 'choose-node' and 'look-again' prompts to stdout.
+# Input:
+#  Reads the user's decision from stdin.
+################################################################################
+function choose_target() {
+  # If no nodes were detected...
+  if [[ "${NAMES[*]}" == "" ]]\
+  && [[ "${IPS[*]}" == "" ]]; then
+    ERR_COUNT=$((ERR_COUNT+1))
+    while true; do
+      if [[ $ERR_COUNT -gt 3 ]]; then
+        printf "No nodes found :( (try run 'airplonk -t' for more) \n\n"
+      else
+        printf "No nodes found :( \n\n";
+      fi
+      printf "Look again? (y/n) >>> "
+      read -r look_again;
+
+      if [[ "${look_again}" == "y" ]]\
+      || [[ "${look_again}" == "Y" ]]; then
+        # Reset $look_again for the child function call
+        look_again=""
+        refresh
+        find_nodes
+        return 0
+      fi
+
+      if [[ "${look_again}" == "n" ]]\
+      || [[ "${look_again}" == "N" ]]; then
+        abrupt_exit
+        exit
+      fi
+
+      blink_look_again
+    done
+
+  else
+    # Some nodes were detected...
+    printf "\n"
+    while true; do
+      printf "Choose a target node (number)\n"
+      printf ", or look again? (y/n) >>> "
+      read -r TARGET_NODE;
+
+      if [[ "${TARGET_NODE}" == "y" ]]\
+      || [[ "${TARGET_NODE}" == "Y" ]]; then
+        refresh
+        # (findNodes calls chooseNodes)
+        find_nodes
+        # Abandon the rest of the logic for the this function call.
+        return
+      fi
+
+      if [[ "${TARGET_NODE}" == "n" ]]\
+      || [[ "${TARGET_NODE}" == "N" ]]; then
+        abrupt_exit
+      fi
+
+      if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]]; then
+        # If input is in range of the listed nodes...
+        if [[ "${TARGET_NODE}" -gt 0 ]]\
+        && [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
+          break
+        fi
+      fi
+
+      blink_choose_target
+    done
+  fi
+}
+
+################################################################################
+# Push the current working directory to the target node.
+# Globals:
+#   NAMES
+#   IPS
+#   TARGET_NODE
+# Arguments:
+#   None
+# Output:
+#   Prompts for username and password in stdout.
+# Input:
+#   Reads username and password for the target node  from stdin.
+################################################################################
+function transmit() {
+    printf "\n"
+    current_dir="$PWD"
+    local timestamp
+    timestamp="$(date +"%D" | sed 's/^\///;s/\//-/g') $(date +"%T")"
+    local destination="${current_dir##*/} $timestamp"
+    destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
+    printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> "
+    read -r username; printf "\n"
+    rsync -a -e "ssh -p $PORT" --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2     "$PWD/"\
+        "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
+        | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
+ }
+
+################################################################################
+# Handle unexpected script termination. (cntrl-c or similar)
+# Globals:
+#   None
+# Arguments:
+#   None
+# Output:
+#   Writes help tip to stdout.
+################################################################################
+trap abrupt_exit SIGINT
+function abrupt_exit() {
+  printf "\nRun 'airplonk --help' for more."
+  exit
+}
+
+################################################################################
+# Clean up process before exit.
+# Globals:
+#   None
+# Arguments:
+#   None
+################################################################################
+trap exit_sequence EXIT
+function exit_sequence() {
+  # Re-enable return key in case script was killed before re-enabling it.
+  stty -igncr 2>/dev/null;
+  # Kill any unfinished spinners.
+  kill "$SPINNER_PID" 2>/dev/null;
+  wait "$SPINNER_PID" 2>/dev/null;
+  printf "\n\n"
+  exit
+}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# End logic
+
+
+function main() {
+  # $1 must be stored gloablly for function 'refresh'.
+  ARG="$1"
+  if [[ "$1" ]]; then
+    case "$ARG" in
+      "-h" | "--help")
+        help
+        exit
+        ;;
+      "-s")
+        support
+        exit
+        ;;
+      "-t")
+        troubleshoot
+        exit
+        ;;
+      "-v" | "--version")
+        version
+        exit
+        ;;
+      "-b")
+        :
+        ;;
+      "-a" | "--android")
+        PORT=8022
+        ;;
+      *)
+        printf "\nairplonk: illegal option %s\n\n" "\'$ARG\'"
+        usage
+        exit
+        ;;
+    esac
+  fi
+
+  if [[ "$COLUMNS" -ge 48 ]]\
+  && [[ $ARG != "-b" ]]; then
+    small_banner
+  fi
+    local os
+    os="$(uname -s)"
+  case "$os" in
+    *"Linux"*)
+      check_dependencies "${LINUX_DEPENDENCIES[*]}"
+      ;;
+    *"darwin"*)
+      check_dependencies "${MACOS_DEPENDENCIES[*]}"
+      ;;
+  esac
+
+  printf "Cargo directory: %s\n\n" "${PWD##*/}";
+    find_nodes
+    transmit
+}
+
+main "$@"
