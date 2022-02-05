@@ -82,7 +82,7 @@ AirPlonk pushes your current working directory to the target node of your choosi
 
 In this example: pushing files from android to macOS.
 
-![](demo_termux.gif) &nbsp;&nbsp; ![](demo_macos.gif) 
+![](demo/demo_termux.gif) &nbsp;&nbsp; ![](demo/demo_macos.gif) 
 
 ## Help
 
