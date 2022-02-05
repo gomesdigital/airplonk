@@ -23,7 +23,7 @@ declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
                                   "printf" "rsync" "sed" "sleep" "stty" "tput"\
 																	"unbuffer" "xargs" "xdg-open")
 declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig"\
-                                  "ipconfig" "nmap"\ "open" "printf" "rsync"\
+                                  "ipconfig" "nmap" "open" "printf" "rsync"\
                                   "sed" "sleep" "stty" "tput" "unbuffer"\
                                   "xargs")
 
@@ -36,9 +36,10 @@ declare -i ERR_COUNT=0  # Number of times 0 nodes where discovered.
 declare -i SPINNER_PID  # PID of the 'looking for nodes...' spinner process.
 declare -i COLUMNS      # Number of columns of the terminal window. (declare
 COLUMNS="$(tput cols)"  # and assign seperately to avoid masking return values)
-declare OS="$(uname -s)"    # Determine environment.
-declare -i PORT
-PORT=22                 # Set port to 22 by default
+declare OS		# Environment specification.
+OS="$(uname -s)"
+declare -i PORT		# The target port to scan for. 
+PORT=22
 
 # Begin logic
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -751,7 +752,8 @@ function main() {
 		small_banner
 	fi
 
-    local os="$(uname -s)"
+    local os
+    os="$(uname -s)"
   case "$os" in
 		*"Linux"*)
 		  check_dependencies "${LINUX_DEPENDENCIES[*]}"
