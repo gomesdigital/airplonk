@@ -22,9 +22,9 @@ declare -r REVISION_DATE="November 2021"
 declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
                                   "printf" "rsync" "sed" "sleep" "stty" "tput"\
 																	"unbuffer" "xargs" "xdg-open")
-declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig"\ 
+declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig"\
                                   "ipconfig" "nmap"\ "open" "printf" "rsync"\
-                                  "sed" "sleep" "stty" "tput" "unbuffer"\ 
+                                  "sed" "sleep" "stty" "tput" "unbuffer"\
                                   "xargs")
 
 declare ARG             # Optional arg value from runtime.
@@ -55,7 +55,7 @@ function check_dependencies() {
 	local dependencies=("$@")
 	local missing_dependencies=()
   for dependency in ${dependencies[*]}; do
-    if ! [[ $(which "$dependency" 2>/dev/null) ]]; then
+    if ! [[ $(which "$dependency") ]]; then
 			missing_dependencies+=("${dependency}")
 		fi
   done
@@ -69,7 +69,7 @@ function check_dependencies() {
 		exit
 	fi
 
-  if [[ $(which "rsync" 2>/dev/null) ]]; then
+  if [[ $(which "rsync") ]]; then
     local rsync_version
     rsync_version=$(rsync --version | grep version | awk '{print $3}')
     local rsync_major
@@ -98,15 +98,15 @@ function check_dependencies() {
 ################################################################################
 function get_host_ip() {
     # Check using "hostname -I" if GNU/Linux
-    if [[ $OS == "Linux" ]]; then 
+    if [[ $OS == "Linux" ]]; then
         if [[ "$(uname -o)" == 'GNU/Linux' ]]; then
             HOST_IP=$(hostname -I | awk '{print $1}')
         # Use "ip addr" if Android
-        else 
+        else
             HOST_IP=$(ip addr show wlan0 | grep inet | grep -v inet6 | awk '{print $2}' | awk '{split($0,a,"/"); print a[1]}')
         fi
         # Otherwise, try ifconfig if Darwin (MacOS)
-    else 
+    else
         HOST_IP=$(ipconfig getifaddr en0)
     fi
 }
@@ -143,7 +143,7 @@ function find_nodes() {
 		fi
 		IPS+=("${ip}")
 		NAMES+=("${name}")
-  done < <(nmap -p "${PORT}" -oG - "${HOST_IP}"/24 2>/dev/null | grep "${PORT}"/open)
+  done < <(nmap -p "${PORT}" -oG - "${HOST_IP}"/24 | grep "${PORT}"/open)
 
   kill $SPINNER_PID
 	# Supress stderr termination notification.
@@ -183,7 +183,7 @@ function choose_target() {
 			read -r look_again;
 
 			if [[ "${look_again}" == "y" ]] \
-			|| [[ "${look_again}" == "Y" ]] 2>/dev/null; then
+			|| [[ "${look_again}" == "Y" ]]; then
 				# Reset $look_again for the child function call
 				look_again=""
 				refresh
@@ -191,7 +191,7 @@ function choose_target() {
 				return 0
 			fi
 
-			if [[ "${look_again}" == "n" ]] || [[ "${look_again}" == "N" ]] 2>/dev/null; then
+			if [[ "${look_again}" == "n" ]] || [[ "${look_again}" == "N" ]]; then
 				abrupt_exit
 				exit
 			fi
@@ -224,7 +224,7 @@ function choose_target() {
 		  if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]]; then
 				# If input is in range of the listed nodes...
         if [[ "${TARGET_NODE}" -gt 0 ]] \
-				&& [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]] 2>/dev/null; then
+				&& [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
 					  break
 				fi
 		  fi
@@ -254,7 +254,7 @@ function transmit() {
     timestamp="$(date +"%D" | sed 's/^\///;s/\//-/g') $(date +"%T")"
     local destination="${current_dir##*/} $timestamp"
     destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
-    printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> " 
+    printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> "
     read -r username; printf "\n"
     rsync -a -e "ssh -p $PORT" --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2     "$PWD/"\
         "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
@@ -288,7 +288,7 @@ function exit_sequence() {
 	# Re-enable return key in case script was killed before re-enabling it.
 	stty -igncr 2>/dev/null;
 	# Kill any unfinished spinners.
-	kill "$SPINNER_PID" 2>/dev/null
+	kill "$SPINNER_PID" 2>/dev/null;
 	wait "$SPINNER_PID" 2>/dev/null;
 	printf "\n\n"
 	exit
@@ -667,7 +667,7 @@ function support() {
 	printf "Kind regards,\n"
 	printf "Daniel Gomes-Sebastiao"
 	# Termux and Linux
-	if ! xdg-open "https://github.com/gomesdigital" 2>/dev/null; then
+	if ! xdg-open "https://github.com/gomesdigital"; then
 			# MacOS
       open "https://github.com/gomesdigital"
   fi
