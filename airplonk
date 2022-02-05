@@ -21,7 +21,7 @@ declare -r VERSION=1.0.2
 declare -r REVISION_DATE="November 2021"
 declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
                                   "printf" "rsync" "sed" "sleep" "stty" "tput"\
-																	"unbuffer" "xargs" "xdg-open")
+                                  "unbuffer" "xargs" "xdg-open")
 declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig"\
                                   "ipconfig" "nmap" "open" "printf" "rsync"\
                                   "sed" "sleep" "stty" "tput" "unbuffer"\
@@ -36,9 +36,9 @@ declare -i ERR_COUNT=0  # Number of times 0 nodes where discovered.
 declare -i SPINNER_PID  # PID of the 'looking for nodes...' spinner process.
 declare -i COLUMNS      # Number of columns of the terminal window. (declare
 COLUMNS="$(tput cols)"  # and assign seperately to avoid masking return values)
-declare OS		# Environment specification.
+declare OS              # Environment specification.
 OS="$(uname -s)"
-declare -i PORT		# The target port to scan for. 
+declare -i PORT         # The target port to scan for.
 PORT=22
 
 # Begin logic
@@ -53,22 +53,22 @@ PORT=22
 #   Lists missing dependencies to stdout.
 ################################################################################
 function check_dependencies() {
-	local dependencies=("$@")
-	local missing_dependencies=()
+  local dependencies=("$@")
+  local missing_dependencies=()
   for dependency in ${dependencies[*]}; do
     if ! [[ $(which "$dependency") ]]; then
-			missing_dependencies+=("${dependency}")
-		fi
+      missing_dependencies+=("${dependency}")
+    fi
   done
 
-	if [[ "${missing_dependencies[*]}" != "" ]]; then
-		printf "You are missing the following dependencies: \n"
+  if [[ "${missing_dependencies[*]}" != "" ]]; then
+    printf "You are missing the following dependencies: \n"
     for missing_dependency in ${missing_dependencies[*]}; do
-	    printf -- " - %s\n" "$missing_dependency"
-		done
-		printf "\nPlease install them to use AirPlonk."
-		exit
-	fi
+      printf -- " - %s\n" "$missing_dependency"
+    done
+    printf "\nPlease install them to use AirPlonk."
+    exit
+  fi
 
   if [[ $(which "rsync") ]]; then
     local rsync_version
@@ -125,36 +125,37 @@ function get_host_ip() {
 #   Lists node names and their IP's to stdout.
 ################################################################################
 function find_nodes() {
-	# Get local ip everytime. (in case of switching networks)
-	get_host_ip
+  # Get local ip everytime. (in case of switching networks)
+  get_host_ip
   # Provide some feedback during the net scan process.
   scan_spin &
   # Store the PID of the previous command. (scan_spin)
   SPINNER_PID=$!
   # Execute the net scan and populate arrays.
   while IFS= read -r line; do
-		name="$(printf "%s\n" "${line}" | awk '{print $3}')"
-		name="${name:1:${#name}-2}"
-		ip="$(printf "%s\n" "${line}" | awk '{print $2}')"
-		# If nmap cannot resolve a hostname,
-		if [[ "${name}" == "" ]] && [[ "${ip}" != "" ]]; then
-			# try find it with arp.
-			name="$(arp "${ip}" | awk '{print $1}' | tr -d '\n')"
-			name=${name#"Address"}
-		fi
-		IPS+=("${ip}")
-		NAMES+=("${name}")
+    name="$(printf "%s\n" "${line}" | awk '{print $3}')"
+    name="${name:1:${#name}-2}"
+    ip="$(printf "%s\n" "${line}" | awk '{print $2}')"
+    # If nmap cannot resolve a hostname,
+    if [[ "${name}" == "" ]]\
+    && [[ "${ip}" != "" ]]; then
+      # try find it with arp.
+      name="$(arp "${ip}" | awk '{print $1}' | tr -d '\n')"
+      name=${name#"Address"}
+    fi
+    IPS+=("${ip}")
+    NAMES+=("${name}")
   done < <(nmap -p "${PORT}" -oG - "${HOST_IP}"/24 | grep "${PORT}"/open)
 
   kill $SPINNER_PID
-	# Supress stderr termination notification.
-	wait $SPINNER_PID 2>/dev/null;
-	printf "\n\n"
-	for (( i=0; i<"${#IPS[@]}"; i++ )); do
-		printf "%s\n" "$((i+1)). ${NAMES[i]} ${IPS[i]}"
-	done
+  # Supress stderr termination notification.
+  wait $SPINNER_PID 2>/dev/null;
+  printf "\n\n"
+  for (( i=0; i<"${#IPS[@]}"; i++ )); do
+  printf "%s\n" "$((i+1)). ${NAMES[i]} ${IPS[i]}"
+  done
 
-	choose_target
+  choose_target
 }
 
 ################################################################################
@@ -171,76 +172,78 @@ function find_nodes() {
 #  Reads the user's decision from stdin.
 ################################################################################
 function choose_target() {
-	# If no nodes were detected...
-  if [[ "${NAMES[*]}" == "" ]] && [[ "${IPS[*]}" == "" ]]; then
-	  ERR_COUNT=$((ERR_COUNT+1))
-		while true; do
-			if [[ $ERR_COUNT -gt 3 ]]; then
-				printf "No nodes found :( (try run 'airplonk -t' for more) \n\n"
-			else
-				printf "No nodes found :( \n\n";
-			fi
-			printf "Look again? (y/n) >>> "
-			read -r look_again;
+  # If no nodes were detected...
+  if [[ "${NAMES[*]}" == "" ]]\
+  && [[ "${IPS[*]}" == "" ]]; then
+    ERR_COUNT=$((ERR_COUNT+1))
+    while true; do
+      if [[ $ERR_COUNT -gt 3 ]]; then
+        printf "No nodes found :( (try run 'airplonk -t' for more) \n\n"
+      else
+        printf "No nodes found :( \n\n";
+      fi
+      printf "Look again? (y/n) >>> "
+      read -r look_again;
 
-			if [[ "${look_again}" == "y" ]] \
-			|| [[ "${look_again}" == "Y" ]]; then
-				# Reset $look_again for the child function call
-				look_again=""
-				refresh
-				find_nodes
-				return 0
-			fi
+      if [[ "${look_again}" == "y" ]]\
+      || [[ "${look_again}" == "Y" ]]; then
+        # Reset $look_again for the child function call
+        look_again=""
+        refresh
+        find_nodes
+        return 0
+      fi
 
-			if [[ "${look_again}" == "n" ]] || [[ "${look_again}" == "N" ]]; then
-				abrupt_exit
-				exit
-			fi
+      if [[ "${look_again}" == "n" ]]\
+      || [[ "${look_again}" == "N" ]]; then
+        abrupt_exit
+        exit
+      fi
 
-			blink_look_again
-		done
+      blink_look_again
+    done
 
   else
-		# Some nodes were detected...
-		printf "\n"
-    while true;
-	  do
-		  printf "Choose a target node (number)\n"
-		  printf ", or look again? (y/n) >>> "
-		  read -r TARGET_NODE;
+    # Some nodes were detected...
+    printf "\n"
+    while true; do
+      printf "Choose a target node (number)\n"
+      printf ", or look again? (y/n) >>> "
+      read -r TARGET_NODE;
 
-		  if [[ "${TARGET_NODE}" == "y" ]] || [[ "${TARGET_NODE}" == "Y" ]]; then
-			  refresh
-			  # (findNodes calls chooseNodes)
-			  find_nodes
-			  # Abandon the rest of the logic for the this function call.
-			  return
-		  fi
+      if [[ "${TARGET_NODE}" == "y" ]]\
+      || [[ "${TARGET_NODE}" == "Y" ]]; then
+        refresh
+        # (findNodes calls chooseNodes)
+        find_nodes
+        # Abandon the rest of the logic for the this function call.
+        return
+      fi
 
-		  if [[ "${TARGET_NODE}" == "n" ]] || [[ "${TARGET_NODE}" == "N" ]]; then
-				abrupt_exit
-			  exit
-		  fi
+      if [[ "${TARGET_NODE}" == "n" ]]\
+      || [[ "${TARGET_NODE}" == "N" ]]; then
+        abrupt_exit
+      fi
 
-		  if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]]; then
-				# If input is in range of the listed nodes...
-        if [[ "${TARGET_NODE}" -gt 0 ]] \
-				&& [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
-					  break
-				fi
-		  fi
+      if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]]; then
+        # If input is in range of the listed nodes...
+        if [[ "${TARGET_NODE}" -gt 0 ]]\
+        && [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
+          break
+        fi
+      fi
 
-			blink_choose_target
-		done
-	fi
+      blink_choose_target
+    done
+  fi
 }
 
 ################################################################################
 # Push the current working directory to the target node.
 # Globals:
 #   NAMES
-#		IPS
-#		TARGET_NODE
+#   IPS
+#   TARGET_NODE
 # Arguments:
 #   None
 # Output:
@@ -273,8 +276,8 @@ function transmit() {
 ################################################################################
 trap abrupt_exit SIGINT
 function abrupt_exit() {
-	printf "\nRun 'airplonk --help' for more."
-	exit
+  printf "\nRun 'airplonk --help' for more."
+  exit
 }
 
 ################################################################################
@@ -286,13 +289,13 @@ function abrupt_exit() {
 ################################################################################
 trap exit_sequence EXIT
 function exit_sequence() {
-	# Re-enable return key in case script was killed before re-enabling it.
-	stty -igncr 2>/dev/null;
-	# Kill any unfinished spinners.
-	kill "$SPINNER_PID" 2>/dev/null;
-	wait "$SPINNER_PID" 2>/dev/null;
-	printf "\n\n"
-	exit
+  # Re-enable return key in case script was killed before re-enabling it.
+  stty -igncr 2>/dev/null;
+  # Kill any unfinished spinners.
+  kill "$SPINNER_PID" 2>/dev/null;
+  wait "$SPINNER_PID" 2>/dev/null;
+  printf "\n\n"
+  exit
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # End logic
@@ -324,36 +327,36 @@ function clear_n_lines() {
 #   Writes a series of 'look-again' prompts to stdout.
 ################################################################################
 function blink_look_again() {
-	# Ignore cursor movement by the return key.
-	stty igncr
+  # Ignore cursor movement by the return key.
+  stty igncr
 
   clear_n_lines 3
 
-	printf "No nodes found :( \n\n";
-	printf "Look again? (y/n) >>> \n"
+  printf "No nodes found :( \n\n";
+  printf "Look again? (y/n) >>> \n"
   sleep 0.1
 
   clear_n_lines 3
 
-	printf "No nodes found :( \n\n";
-	printf "Look again?       >>> \n"
-	sleep 0.1
-
-	clear_n_lines 3
-
-	printf "No nodes found :( \n\n";
-	printf "Look again? (y/n) >>> \n"
+  printf "No nodes found :( \n\n";
+  printf "Look again?       >>> \n"
   sleep 0.1
 
   clear_n_lines 3
 
-	printf "No nodes found :( \n\n";
-	printf "Look again?       >>> \n"
+  printf "No nodes found :( \n\n";
+  printf "Look again? (y/n) >>> \n"
   sleep 0.1
 
   clear_n_lines 3
 
-	stty -igncr
+  printf "No nodes found :( \n\n";
+  printf "Look again?       >>> \n"
+  sleep 0.1
+
+  clear_n_lines 3
+
+  stty -igncr
 }
 
 ################################################################################
@@ -366,35 +369,35 @@ function blink_look_again() {
 #   Writes a series of 'choose-target' prompts to stdout.
 ################################################################################
 function blink_choose_target() {
-	stty igncr
+  stty igncr
 
   clear_n_lines 2
 
-	printf "Choose a target node (number)\n"
+  printf "Choose a target node (number)\n"
   printf ", or look again? (y/n) >>> \n"
   sleep 0.1
 
   clear_n_lines 2
 
-	printf "Choose a target node         \n"
-	printf ", or look again?       >>> \n"
+  printf "Choose a target node         \n"
+  printf ", or look again?       >>> \n"
   sleep 0.1
 
   clear_n_lines 2
 
-	printf "Choose a target node (number)\n"
-	printf ", or look again? (y/n) >>> \n"
+  printf "Choose a target node (number)\n"
+  printf ", or look again? (y/n) >>> \n"
   sleep 0.1
 
   clear_n_lines 2
 
-	printf "Choose a target node         \n"
-	printf ", or look again?       >>> \n"
+  printf "Choose a target node         \n"
+  printf ", or look again?       >>> \n"
   sleep 0.1
 
   clear_n_lines 2
 
-	stty -igncr
+  stty -igncr
 }
 
 ################################################################################
@@ -407,14 +410,14 @@ function blink_choose_target() {
 #   Writes a spinner sequence to stdout.
 ################################################################################
 function scan_spin() {
-	spinner=( "Looking for nodes." "Looking for nodes.." "Looking for nodes...")
+  spinner=( "Looking for nodes." "Looking for nodes.." "Looking for nodes...")
   while true; do
-		for i in "${spinner[@]}"; do
-			printf "\r%s" "$i"
-			sleep 0.5
-			printf "\033[2K"
-		done
-	done
+    for i in "${spinner[@]}"; do
+      printf "\r%s" "$i"
+      sleep 0.5
+      printf "\033[2K"
+    done
+  done
 }
 
 ################################################################################
@@ -554,13 +557,13 @@ fi
 #   Writes banner (big or small) to stdout.
 ################################################################################
 function refresh() {
-	NAMES=()
-	IPS=()
-	clear
-	if ! [[ "$ARG" == '-b' ]]; then
-		stty igncr
-		if [[ "$(tput cols)" -ge 48 ]]; then
-    printf "
+  NAMES=()
+  IPS=()
+  clear
+  if ! [[ "$ARG" == '-b' ]]; then
+    stty igncr
+    if [[ "$(tput cols)" -ge 48 ]]; then
+      printf "
                           \e[34m..,;:cll;.
                                   'lkkc.
                                       ;OO,\e[0m
@@ -577,9 +580,9 @@ d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
 
 "
     fi
-  stty -igncr
-fi
-printf "Cargo directory: %s\n\n" "${PWD##*/}";
+    stty -igncr
+  fi
+  printf "Cargo directory: %s\n\n" "${PWD##*/}";
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # End animation functions
@@ -597,40 +600,40 @@ printf "Cargo directory: %s\n\n" "${PWD##*/}";
 #   Writes the help menu to stdout.
 ################################################################################
 function help() {
-	 clear
-	 if [[ COLUMNS -gt 80 ]]; then
-		 printf "%*s\n" $(( (${#TITLE} + 80) / 2 )) "$TITLE"
-	else
-		printf "%*s\n" $(( (${#TITLE} + 80) / 2 )) "$TITLE"
-	 fi
-	 printf "\n"
-	 printf "\e[1mNAME\e[0m\n"
-	 printf "       airplonk - a no-fuss file-sharing tool.\n\n"
-	 printf "\e[1mDESCRIPTION\e[0m\n"
-	 printf "       AirPlonk is a no-fuss way to push stuff to SSH-able nodes on your local\n"
-	 printf "       network. It will push your current working directory into ~/AirPlonk on\n"
-	 printf "       the target node.\n\n"
-   usage
-	 printf "\n\e[1mBUGS\e[0m\n"
-	 printf "       See our issues on GitHub: "
-   printf "https://github.com/gomesdigital/AirPlonk/issues\n\n"
-	 printf "       If you have detected a bug, please open an issue on the GitHub page\n"
-	 printf "       linked above.\n"
-	 printf "\n\e[1mAUTHORS\e[0m\n"
-	 printf "       AirPlonk was originally written by Daniel Gomes-Sebastiao and is\n"
-	 printf "       currently maintained by Daniel Gomes-Sebastiao.\n\n"
-	 printf "\e[1mCOPYRIGHT\e[0m\n"
-	 printf "       AirPlonk Copyright (C) 2021 Daniel Gomes-Sebastiao\n"
-	 printf "       AirPlonk comes with ABSOLUTELY NO WARRANTY. This is free software, and \n"
-   printf "       you are welcome to redistribute it under certain conditions. See the GNU \n"
-	 printf "       Licence for details.\n\n"
-	 printf "       You should have received a copy of the GNU General Public License along \n"
-	 printf "       with this program. If not, see <https://www.gnu.org/licenses/>.\n\n"
-	 if [[ $COLUMNS -gt 80 ]]; then
-		 printf "%*s" $(((${#REVISION_DATE} + 80) / 2)) "$REVISION_DATE"
-	 else
- 		 printf "%*s" $(((${#REVISION_DATE} + COLUMNS) / 2)) "$REVISION_DATE"
-	 fi
+  clear
+  if [[ COLUMNS -gt 80 ]]; then
+    printf "%*s\n" $(( (${#TITLE} + 80) / 2 )) "$TITLE"
+  else
+    printf "%*s\n" $(( (${#TITLE} + 80) / 2 )) "$TITLE"
+  fi
+  printf "\n"
+  printf "\e[1mNAME\e[0m\n"
+  printf "       airplonk - a no-fuss file-sharing tool.\n\n"
+  printf "\e[1mDESCRIPTION\e[0m\n"
+  printf "       AirPlonk is a no-fuss way to push stuff to SSH-able nodes on your local\n"
+  printf "       network. It will push your current working directory into ~/AirPlonk on\n"
+  printf "       the target node.\n\n"
+  usage
+  printf "\n\e[1mBUGS\e[0m\n"
+  printf "       See our issues on GitHub: "
+  printf "https://github.com/gomesdigital/AirPlonk/issues\n\n"
+  printf "       If you have detected a bug, please open an issue on the GitHub page\n"
+  printf "       linked above.\n"
+  printf "\n\e[1mAUTHORS\e[0m\n"
+  printf "       AirPlonk was originally written by Daniel Gomes-Sebastiao and is\n"
+  printf "       currently maintained by Daniel Gomes-Sebastiao.\n\n"
+  printf "\e[1mCOPYRIGHT\e[0m\n"
+  printf "       AirPlonk Copyright (C) 2021 Daniel Gomes-Sebastiao\n"
+  printf "       AirPlonk comes with ABSOLUTELY NO WARRANTY. This is free software, and \n"
+  printf "       you are welcome to redistribute it under certain conditions. See the GNU \n"
+  printf "       Licence for details.\n\n"
+  printf "       You should have received a copy of the GNU General Public License along \n"
+  printf "       with this program. If not, see <https://www.gnu.org/licenses/>.\n\n"
+  if [[ $COLUMNS -gt 80 ]]; then
+    printf "%*s" $(((${#REVISION_DATE} + 80) / 2)) "$REVISION_DATE"
+  else
+    printf "%*s" $(((${#REVISION_DATE} + COLUMNS) / 2)) "$REVISION_DATE"
+  fi
 }
 
 ################################################################################
@@ -643,15 +646,15 @@ function help() {
 #   Writes syntax information to stdout.
 ##################### ###########################################################
 function usage() {
-	printf "\e[1mSYNOPSIS\e[0m\n"
-	printf "       airplonk [OPTION]\n\n"
-	printf "\e[1mOPTIONS\e[0m\n"
-	printf "       \e[1m-a\e[0m  Search for non-root Android devices over port 8022.\n"
-	printf "       \e[1m-b\e[0m  Run without banner.\n"
-	printf "       \e[1m-h\e[0m  Print this help menu.\n"
-	printf "       \e[1m-s\e[0m  Support me on github with a follow or star.\n"
-	printf "       \e[1m-t\e[0m  Troubleshoot.\n"
-	printf "       \e[1m-v\e[0m  See version info."
+  printf "\e[1mSYNOPSIS\e[0m\n"
+  printf "       airplonk [OPTION]\n\n"
+  printf "\e[1mOPTIONS\e[0m\n"
+  printf "       \e[1m-a\e[0m  Search for non-root Android devices over port 8022.\n"
+  printf "       \e[1m-b\e[0m  Run without banner.\n"
+  printf "       \e[1m-h\e[0m  Print this help menu.\n"
+  printf "       \e[1m-s\e[0m  Support me on github with a follow or star.\n"
+  printf "       \e[1m-t\e[0m  Troubleshoot.\n"
+  printf "       \e[1m-v\e[0m  See version info."
 }
 
 ################################################################################
@@ -662,15 +665,15 @@ function usage() {
 #   None
 ################################################################################
 function support() {
-	printf "\nThank you for your support.\n\n"
-	printf "Follow this link: https://github.com/gomesdigital\n"
-	printf "to support me with a star/follow on github. \n\n"
-	printf "Kind regards,\n"
-	printf "Daniel Gomes-Sebastiao"
-	# Termux and Linux
-	if ! xdg-open "https://github.com/gomesdigital"; then
-			# MacOS
-      open "https://github.com/gomesdigital"
+  printf "\nThank you for your support.\n\n"
+  printf "Follow this link: https://github.com/gomesdigital\n"
+  printf "to support me with a star/follow on github. \n\n"
+  printf "Kind regards,\n"
+  printf "Daniel Gomes-Sebastiao"
+  # Termux and Linux
+  if ! xdg-open "https://github.com/gomesdigital"; then
+    # MacOS
+    open "https://github.com/gomesdigital"
   fi
 }
 
@@ -684,15 +687,15 @@ function support() {
 #   Writes the some troubleshooting tips to stdout.
 ################################################################################
 function troubleshoot() {
-	printf "\n"
-	printf "Can't find any nodes...?\n"
-	printf "It is likely that your target node is not running an SSH service.\n\n"
-	printf "How to launch an SSH service differs from OS to OS:\n\n"
-	printf " - MacOS: see https://support.apple.com/en-gb/guide/mac-help/mchlp1066/mac\n\n"
-	printf " - Linux: see https://opensource.com/article/20/9/ssh\n\n"
-	printf " - Windows 10: see https://www.howtogeek.com/336775/how-to-enable-and-use-windows-10s-built-in-ssh-commands/\n\n"
-	printf "* On Windows 8 and below you will likely require a 3rd party SSH client,\n"
-	printf "  like this one: https://www.putty.org/"
+  printf "\n"
+  printf "Can't find any nodes...?\n"
+  printf "It is likely that your target node is not running an SSH service.\n\n"
+  printf "How to launch an SSH service differs from OS to OS:\n\n"
+  printf " - MacOS: see https://support.apple.com/en-gb/guide/mac-help/mchlp1066/mac\n\n"
+  printf " - Linux: see https://opensource.com/article/20/9/ssh\n\n"
+  printf " - Windows 10: see https://www.howtogeek.com/336775/how-to-enable-and-use-windows-10s-built-in-ssh-commands/\n\n"
+  printf "* On Windows 8 and below you will likely require a 3rd party SSH client,\n"
+  printf "  like this one: https://www.putty.org/"
 }
 
 ################################################################################
@@ -703,69 +706,69 @@ function troubleshoot() {
 #   None
 ################################################################################
 function version() {
-	printf "\nAirPlonk, version %s\n" "$VERSION"
-	printf "Copyright (C) 2021 Daniel Gomes-Sebastiao\n\n"
-	printf "AirPlonk comes with ABSOLUTELY NO WARRANTY. This is free software, and you are\n"
-	printf "welcome to redistribute it under certain conditions. See the GNU General Public\n"
-	printf "Licence for details."
+  printf "\nAirPlonk, version %s\n" "$VERSION"
+  printf "Copyright (C) 2021 Daniel Gomes-Sebastiao\n\n"
+  printf "AirPlonk comes with ABSOLUTELY NO WARRANTY. This is free software, and you are\n"
+  printf "welcome to redistribute it under certain conditions. See the GNU General Public\n"
+  printf "Licence for details."
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # End manual
 
 
 function main() {
-	# $1 must be stored gloablly for function 'refresh'.
+  # $1 must be stored gloablly for function 'refresh'.
   ARG="$1"
-	if [[ "$1" ]]; then
-	  case "$ARG" in
-			"-h" | "--help")
-			  help
-				exit
-				;;
-			"-s")
-			  support
-				exit
-				;;
-			"-t")
-			  troubleshoot
-				exit
-				;;
-			"-v" | "--version")
-			  version
-				exit
-				;;
-			"-b")
-			  :
-				;;
-            "-a" | "--android")
-			  PORT=8022
-				;;
-			*)
-			  printf "\nairplonk: illegal option %s\n\n" "\'$ARG\'"
-				usage
-				exit
-				;;
-		esac
-	fi
+  if [[ "$1" ]]; then
+    case "$ARG" in
+      "-h" | "--help")
+        help
+        exit
+        ;;
+      "-s")
+        support
+        exit
+        ;;
+      "-t")
+        troubleshoot
+        exit
+        ;;
+      "-v" | "--version")
+        version
+        exit
+        ;;
+      "-b")
+        :
+        ;;
+      "-a" | "--android")
+        PORT=8022
+        ;;
+      *)
+        printf "\nairplonk: illegal option %s\n\n" "\'$ARG\'"
+        usage
+        exit
+        ;;
+    esac
+  fi
 
-	if [[ "$COLUMNS" -ge 48 ]] && [[ $ARG != "-b" ]]; then
-		small_banner
-	fi
-
+  if [[ "$COLUMNS" -ge 48 ]]\
+  && [[ $ARG != "-b" ]]; then
+    small_banner
+  fi
     local os
     os="$(uname -s)"
   case "$os" in
-		*"Linux"*)
-		  check_dependencies "${LINUX_DEPENDENCIES[*]}"
-			;;
-		*"darwin"*)
-		  check_dependencies "${MACOS_DEPENDENCIES[*]}"
-			;;
-	esac
+    *"Linux"*)
+      check_dependencies "${LINUX_DEPENDENCIES[*]}"
+      ;;
+    *"darwin"*)
+      check_dependencies "${MACOS_DEPENDENCIES[*]}"
+      ;;
+  esac
 
-	printf "Cargo directory: %s\n\n" "${PWD##*/}";
-	find_nodes
-	transmit
+  printf "Cargo directory: %s\n\n" "${PWD##*/}";
+    find_nodes
+    transmit
 }
 
 main "$@"
