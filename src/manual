@@ -1,0 +1,144 @@
+#!/bin/bash
+#
+#  Contains information related functions for the airplonk script.
+#
+#  Copyright (C) 2021 Daniel Gomes-Sebastiao
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 3 of the License.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Begin manual
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+################################################################################
+# Display help menu.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Output:
+#   Writes the help menu to stdout.
+################################################################################
+function help() {
+  clear
+  if [[ COLUMNS -gt 80 ]]; then
+    printf "%*s\n" $(( (${#TITLE} + 80) / 2 )) "$TITLE"
+  else
+    printf "%*s\n" $(( (${#TITLE} + 80) / 2 )) "$TITLE"
+  fi
+  printf "\n"
+  printf "\e[1mNAME\e[0m\n"
+  printf "       airplonk - a no-fuss file-sharing tool.\n\n"
+  printf "\e[1mDESCRIPTION\e[0m\n"
+  printf "       AirPlonk is a no-fuss way to push stuff to SSH-able nodes on your local\n"
+  printf "       network. It will push your current working directory into ~/AirPlonk on\n"
+  printf "       the target node.\n\n"
+  usage
+  printf "\n\e[1mBUGS\e[0m\n"
+  printf "       See our issues on GitHub: "
+  printf "https://github.com/gomesdigital/AirPlonk/issues\n\n"
+  printf "       If you have detected a bug, please open an issue on the GitHub page\n"
+  printf "       linked above.\n"
+  printf "\n\e[1mAUTHORS\e[0m\n"
+  printf "       AirPlonk was originally written by Daniel Gomes-Sebastiao and is\n"
+  printf "       currently maintained by Daniel Gomes-Sebastiao.\n\n"
+  printf "\e[1mCOPYRIGHT\e[0m\n"
+  printf "       AirPlonk Copyright (C) 2021 Daniel Gomes-Sebastiao\n"
+  printf "       AirPlonk comes with ABSOLUTELY NO WARRANTY. This is free software, and \n"
+  printf "       you are welcome to redistribute it under certain conditions. See the GNU \n"
+  printf "       Licence for details.\n\n"
+  printf "       You should have received a copy of the GNU General Public License along \n"
+  printf "       with this program. If not, see <https://www.gnu.org/licenses/>.\n\n"
+  if [[ $COLUMNS -gt 80 ]]; then
+    printf "%*s" $(((${#REVISION_DATE} + 80) / 2)) "$REVISION_DATE"
+  else
+    printf "%*s" $(((${#REVISION_DATE} + COLUMNS) / 2)) "$REVISION_DATE"
+  fi
+}
+
+################################################################################
+# Display usage syntax.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Output:
+#   Writes syntax information to stdout.
+##################### ###########################################################
+function usage() {
+  printf "\e[1mSYNOPSIS\e[0m\n"
+  printf "       airplonk [OPTION]\n\n"
+  printf "\e[1mOPTIONS\e[0m\n"
+  printf "       \e[1m-a\e[0m  Search for non-root Android devices over port 8022.\n"
+  printf "       \e[1m-b\e[0m  Run without banner.\n"
+  printf "       \e[1m-h\e[0m  Print this help menu.\n"
+  printf "       \e[1m-s\e[0m  Support me on github with a follow or star.\n"
+  printf "       \e[1m-t\e[0m  Troubleshoot.\n"
+  printf "       \e[1m-v\e[0m  See version info."
+}
+
+################################################################################
+# Open the default browser to the author's landing page.
+# Globals:
+#   None
+# Arguments:
+#   None
+################################################################################
+function support() {
+  printf "\nThank you for your support.\n\n"
+  printf "Follow this link: https://github.com/gomesdigital\n"
+  printf "to support me with a star/follow on github. \n\n"
+  printf "Kind regards,\n"
+  printf "Daniel Gomes-Sebastiao"
+  # Termux and Linux
+  if ! xdg-open "https://github.com/gomesdigital"; then
+    # MacOS
+    open "https://github.com/gomesdigital"
+  fi
+}
+
+################################################################################
+# Display a troubleshoot guide.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Output:
+#   Writes the some troubleshooting tips to stdout.
+################################################################################
+function troubleshoot() {
+  printf "\n"
+  printf "Can't find any nodes...?\n"
+  printf "It is likely that your target node is not running an SSH service.\n\n"
+  printf "How to launch an SSH service differs from OS to OS:\n\n"
+  printf " - MacOS: see https://support.apple.com/en-gb/guide/mac-help/mchlp1066/mac\n\n"
+  printf " - Linux: see https://opensource.com/article/20/9/ssh\n\n"
+  printf " - Windows 10: see https://www.howtogeek.com/336775/how-to-enable-and-use-windows-10s-built-in-ssh-commands/\n\n"
+  printf "* On Windows 8 and below you will likely require a 3rd party SSH client,\n"
+  printf "  like this one: https://www.putty.org/"
+}
+
+################################################################################
+# Display semantic version.
+# Globals:
+#   VERSION
+# Arguments:
+#   None
+################################################################################
+function version() {
+  printf "\nAirPlonk, version %s\n" "$VERSION"
+  printf "Copyright (C) 2021 Daniel Gomes-Sebastiao\n\n"
+  printf "AirPlonk comes with ABSOLUTELY NO WARRANTY. This is free software, and you are\n"
+  printf "welcome to redistribute it under certain conditions. See the GNU General Public\n"
+  printf "Licence for details."
+}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# End manual

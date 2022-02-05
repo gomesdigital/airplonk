@@ -1,0 +1,287 @@
+#! /bin/bash
+
+# Begin animation functions
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+################################################################################
+# Clear n previous lines from the terminal display.
+# Globals:
+#   None
+# Arguments:
+#   Number of lines to clear.
+################################################################################
+function clear_n_lines() {
+  for (( i=0; i<$1; i++ )); do
+    printf "%b" "\e[A\e[2K"
+  done
+}
+
+################################################################################
+# Create a blinking effect for the 'look-again' prompt. (when no nodes are det-
+# cted)
+# Globals:
+#   None
+# Arguments:
+#   None
+# Output:
+#   Writes a series of 'look-again' prompts to stdout.
+################################################################################
+function blink_look_again() {
+  # Ignore cursor movement by the return key.
+  stty igncr
+
+  clear_n_lines 3
+
+  printf "No nodes found :( \n\n";
+  printf "Look again? (y/n) >>> \n"
+  sleep 0.1
+
+  clear_n_lines 3
+
+  printf "No nodes found :( \n\n";
+  printf "Look again?       >>> \n"
+  sleep 0.1
+
+  clear_n_lines 3
+
+  printf "No nodes found :( \n\n";
+  printf "Look again? (y/n) >>> \n"
+  sleep 0.1
+
+  clear_n_lines 3
+
+  printf "No nodes found :( \n\n";
+  printf "Look again?       >>> \n"
+  sleep 0.1
+
+  clear_n_lines 3
+
+  stty -igncr
+}
+
+################################################################################
+# Create a blinking effect for the 'choose-target' prompt.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Writes a series of 'choose-target' prompts to stdout.
+################################################################################
+function blink_choose_target() {
+  stty igncr
+
+  clear_n_lines 2
+
+  printf "Choose a target node (number)\n"
+  printf ", or look again? (y/n) >>> \n"
+  sleep 0.1
+
+  clear_n_lines 2
+
+  printf "Choose a target node         \n"
+  printf ", or look again?       >>> \n"
+  sleep 0.1
+
+  clear_n_lines 2
+
+  printf "Choose a target node (number)\n"
+  printf ", or look again? (y/n) >>> \n"
+  sleep 0.1
+
+  clear_n_lines 2
+
+  printf "Choose a target node         \n"
+  printf ", or look again?       >>> \n"
+  sleep 0.1
+
+  clear_n_lines 2
+
+  stty -igncr
+}
+
+################################################################################
+# Spinner for whilst scanning nodes.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Output:
+#   Writes a spinner sequence to stdout.
+################################################################################
+function scan_spin() {
+  spinner=( "Looking for nodes." "Looking for nodes.." "Looking for nodes...")
+  while true; do
+    for i in "${spinner[@]}"; do
+      printf "\r%s" "$i"
+      sleep 0.5
+      printf "\033[2K"
+    done
+  done
+}
+
+################################################################################
+# Display boot animation.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Writes small banner animation to stdout.
+################################################################################
+function small_banner() {
+  clear
+  if ! [[ "$ARG" == '-b' ]]; then
+    stty igncr
+    printf "\n \n \n \n \n \n \n \n \n \n \n \n \n \n"
+    #sleep .5
+    clear
+    printf "
+
+
+
+       d8888 8888888b.
+      d88888 888   Y88b
+     d88P888 888    888
+    d88P 888 888   d88P
+   d88P  888 8888888P\"
+  d88P   888 888
+ d8888888888 888
+d88P     888 888
+
+
+
+"
+    sleep .5
+    clear
+    printf "
+
+
+
+       d8888 8888888b.
+      d88888 888   Y88b
+     d88P888 888    888
+    d88P 888 888   d88P
+   d88P  888 8888888P\"
+  d88P   888 888        \e[34m.oxd;\e[0m
+ d8888888888 888       \e[34m.Wl .Nl\e[0m
+d88P     888 888        \e[34mdKxO0.\e[0m
+
+
+
+"
+    sleep .1
+    clear
+    printf "
+
+
+
+       d8888 8888888b.
+      d88888 888   Y88b
+     d88P888 888    888  \e[34m.''.\e[0m
+    d88P 888 888   d88P    \e[34m.:xOo.\e[0m
+   d88P  888 8888888P\"         \e[34m;Kd\e[0m
+  d88P   888 888        \e[34m.oxd;    xk\e[0m
+ d8888888888 888       \e[34m.Wl .Nl    0\e[0m
+d88P     888 888        \e[34mdKxO0.    .\e[0m
+
+
+
+"
+    sleep .1
+    clear
+    printf "
+
+
+
+       d8888 8888888b.    \e[34m.';cldo,\e[0m
+      d88888 888   Y88b         \e[34m.;k0:\e[0m
+     d88P888 888    888  \e[34m.''.       lX:\e[0m
+    d88P 888 888   d88P    \e[34m.:xOo.    .OO\e[0m
+   d88P  888 8888888P\"         \e[34m;Kd     xx\e[0m
+  d88P   888 888        \e[34m.oxd;    xk     K.\e[0m
+ d8888888888 888       \e[34m.Wl .Nl    0     ;,\e[0m
+d88P     888 888        \e[34mdKxO0.    .      .\e[0m
+
+
+
+"
+    sleep .1
+    clear
+    printf "
+                          \e[34m..,;:cll;.
+                                  'lkkc.
+                                      ;OO,\e[0m
+       d8888 8888888b.    \e[34m.';cldo,      .k0.\e[0m
+      d88888 888   Y88b         \e[34m.;k0:     'Xl\e[0m
+     d88P888 888    888  \e[34m.''.       lX:     0d\e[0m
+    d88P 888 888   d88P    \e[34m.:xOo.    .OO     K;\e[0m
+   d88P  888 8888888P\"         \e[34m;Kd     xx    .K\e[0m
+  d88P   888 888        \e[34m.oxd;    xk     K.    x.\e[0m
+ d8888888888 888       \e[34m.Wl .Nl    0     ;,    ,.\e[0m
+d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
+
+
+
+"
+  sleep 1
+  clear
+  printf "
+                          \e[34m..,;:cll;.
+                                  'lkkc.
+                                      ;OO,\e[0m
+       d8888 8888888b.    \e[34m.';cldo,      .k0.\e[0m
+      d88888 888   Y88b         \e[34m.;k0:     'Xl\e[0m
+     d88P888 888    888  \e[34m.''.       lX:     0d\e[0m
+    d88P 888 888   d88P    \e[34m.:xOo.    .OO     K;\e[0m
+   d88P  888 8888888P\"         \e[34m;Kd     xx    .K\e[0m
+  d88P   888 888        \e[34m.oxd;    xk     K.    x.\e[0m
+ d8888888888 888       \e[34m.Wl .Nl    0     ;,    ,.\e[0m
+d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
+
+      [by https://github.com/gomesdigital]
+
+"
+  sleep 1
+  stty -igncr
+fi
+}
+
+################################################################################
+# Clears the display without affecting the banner.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Writes banner (big or small) to stdout.
+################################################################################
+function refresh() {
+  NAMES=()
+  IPS=()
+  clear
+  if ! [[ "$ARG" == '-b' ]]; then
+    stty igncr
+    if [[ "$(tput cols)" -ge 48 ]]; then
+      printf "
+                          \e[34m..,;:cll;.
+                                  'lkkc.
+                                      ;OO,\e[0m
+       d8888 8888888b.    \e[34m.';cldo,      .k0.\e[0m
+      d88888 888   Y88b         \e[34m.;k0:     'Xl\e[0m
+     d88P888 888    888  \e[34m.''.       lX:     0d\e[0m
+    d88P 888 888   d88P    \e[34m.:xOo.    .OO     K;\e[0m
+   d88P  888 8888888P\"         \e[34m;Kd     xx    .K\e[0m
+  d88P   888 888        \e[34m.oxd;    xk     K.    x.\e[0m
+ d8888888888 888       \e[34m.Wl .Nl    0     ;,    ,.\e[0m
+d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
+
+      [by https://github.com/gomesdigital]
+
+"
+    fi
+    stty -igncr
+  fi
+  printf "Cargo directory: %s\n\n" "${PWD##*/}";
+}
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# End animation functions
