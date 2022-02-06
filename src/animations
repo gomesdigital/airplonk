@@ -32,90 +32,6 @@ function clear_n_lines() {
 }
 
 ################################################################################
-# Create a blinking effect for the 'look-again' prompt. (when no nodes are det-
-# cted)
-# Globals:
-#   None
-# Arguments:
-#   None
-# Output:
-#   Writes a series of 'look-again' prompts to stdout.
-################################################################################
-function blink_look_again() {
-  # Ignore cursor movement by the return key.
-  stty igncr
-
-  clear_n_lines 3
-
-  printf "No nodes found :( \n\n";
-  printf "Look again? (y/n) >>> \n"
-  sleep 0.1
-
-  clear_n_lines 3
-
-  printf "No nodes found :( \n\n";
-  printf "Look again?       >>> \n"
-  sleep 0.1
-
-  clear_n_lines 3
-
-  printf "No nodes found :( \n\n";
-  printf "Look again? (y/n) >>> \n"
-  sleep 0.1
-
-  clear_n_lines 3
-
-  printf "No nodes found :( \n\n";
-  printf "Look again?       >>> \n"
-  sleep 0.1
-
-  clear_n_lines 3
-
-  stty -igncr
-}
-
-################################################################################
-# Create a blinking effect for the 'choose-target' prompt.
-# Globals:
-#   None
-# Arguments:
-#   None
-# Outputs:
-#   Writes a series of 'choose-target' prompts to stdout.
-################################################################################
-function blink_choose_target() {
-  stty igncr
-
-  clear_n_lines 2
-
-  printf "Choose a target node (number)\n"
-  printf ", or look again? (y/n) >>> \n"
-  sleep 0.1
-
-  clear_n_lines 2
-
-  printf "Choose a target node         \n"
-  printf ", or look again?       >>> \n"
-  sleep 0.1
-
-  clear_n_lines 2
-
-  printf "Choose a target node (number)\n"
-  printf ", or look again? (y/n) >>> \n"
-  sleep 0.1
-
-  clear_n_lines 2
-
-  printf "Choose a target node         \n"
-  printf ", or look again?       >>> \n"
-  sleep 0.1
-
-  clear_n_lines 2
-
-  stty -igncr
-}
-
-################################################################################
 # Spinner for whilst scanning nodes.
 # Globals:
 #   None
@@ -147,7 +63,7 @@ function scan_spin() {
 # Outputs:
 #   Writes small banner animation to stdout.
 ################################################################################
-function small_banner() {
+function print_banner() {
   clear
   if ! [[ "$ARG" == '-b' ]]; then
     stty igncr
@@ -274,9 +190,7 @@ fi
 # Outputs:
 #   Writes banner (big or small) to stdout.
 ################################################################################
-function refresh() {
-  NAMES=()
-  IPS=()
+function clear_screen() {
   clear
   if ! [[ "$ARG" == '-b' ]]; then
     stty igncr
