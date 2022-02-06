@@ -39,9 +39,9 @@ declare -i SPINNER_PID  # PID of the 'looking for nodes...' spinner process.
 declare -i COLUMNS      # Number of columns of the terminal window. (declare
 COLUMNS="$(tput cols)"  # and assign seperately to avoid masking return values)
 declare OS              # Environment specification.
-OS="$(uname -s)"
 declare -i PORT         # The target port to scan for.
 PORT=22
+declare -i SPINNER_PID  # The process ID of the spinner when looking for nodes.
 
 # Begin logic
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -55,7 +55,15 @@ PORT=22
 #   Lists missing dependencies to stdout.
 ################################################################################
 function check_dependencies() {
-  local dependencies=("$@")
+  local dependencies
+  case "$OS" in
+    *"Linux"*)
+      dependencies=$LINUX_DEPENDENCIES
+      ;;
+    *"darwin"*)
+      dependencies=$MACOS_DEPENDENCIES
+      ;;
+  esac
   local missing_dependencies=()
   for dependency in ${dependencies[*]}; do
     if ! [[ $(which "$dependency") ]]; then
@@ -190,7 +198,7 @@ function print_nodes() {
 # Output:
 #   Writes the 'choose-node' and 'look-again' prompts to stdout.
 # Input:
-#  Reads the user's decision from stdin.
+#   Reads the user's decision from stdin.
 ################################################################################
 function choose_target() {
   printf "\e[1m"  # enable bold text
@@ -286,7 +294,7 @@ function abrupt_exit() {
 ################################################################################
 # Clean up process before exit.
 # Globals:
-#   None
+#   SPINNER_PID
 # Arguments:
 #   None
 ################################################################################
@@ -303,8 +311,14 @@ function exit_sequence() {
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # End logic
 
-
-function main() {
+################################################################################
+# Executes script features according to the argument passed to it.
+# Globals:
+#   ARG
+# Arguments:
+#   Feature option
+################################################################################
+function execute_feature() {
   # $1 must be stored gloablly for function 'refresh'.
   ARG="$1"
   if [[ "$1" ]]; then
@@ -338,24 +352,25 @@ function main() {
         ;;
     esac
   fi
+}
 
-  if [[ "$COLUMNS" -ge 48 ]]\
-  && [[ $ARG != "-b" ]]; then
-    print_banner
-  fi
-    local os
-    os="$(uname -s)"
-  case "$os" in
-    *"Linux"*)
-      check_dependencies "${LINUX_DEPENDENCIES[*]}"
-      ;;
-    *"darwin"*)
-      check_dependencies "${MACOS_DEPENDENCIES[*]}"
-      ;;
-  esac
+################################################################################
+# Determines the system's environment.
+# Globals:
+#   OS
+# Arguments:
+#   Feature option
+################################################################################
+function determine_environment() {
+  OS="$(uname -s)"
+}
 
-  printf "\e[1m"  # enable bold text
-  printf "Cargo directory:\033[0m %s\n\n" "${PWD}";
+function main() {
+  execute_feature $1
+  determine_environment
+  check_dependencies
+  print_banner
+  printf "\e[1mCargo directory:\033[0m %s\n\n" "${PWD}";
   find_nodes
   transmit
 }
