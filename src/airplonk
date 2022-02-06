@@ -165,8 +165,6 @@ function find_nodes() {
   printf "\e[0m"  # disable green text
   sleep 1
   printf "\n\n"
-  print_nodes
-  choose_target
 }
 
 ################################################################################
@@ -215,36 +213,35 @@ function choose_target() {
   else
     # Some nodes were detected...
     printf "\n\n"
-
     printf "Choose a target node (number)\n"
     printf ", or look again? (y/n) >>> "
   fi
   while true; do
     read -r TARGET_NODE;
-    printf "\e[0m"  # disable bold text
     if [[ "${TARGET_NODE}" == "y" ]]\
     || [[ "${TARGET_NODE}" == "Y" ]]; then
       IPS=()
       NAMES=()
       clear_screen
-      # (findNodes calls chooseNodes)
       find_nodes
-      # Abandon the rest of the logic for the this function call.
-      return 0
+      print_nodes
+      choose_target
+      break
     fi
 
     if [[ "${TARGET_NODE}" == "n" ]]\
     || [[ "${TARGET_NODE}" == "N" ]]; then
-      abrupt_exit
+      exit_sequence
     fi
 
     # if input is an integer
     if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]]\
     && [[ "${TARGET_NODE}" -gt 0 ]]\
     && [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
-      return 0
+      break
     fi
   done
+  printf "\e[0m"  # disable bold text
 }
 
 ################################################################################
@@ -285,21 +282,10 @@ function transmit() {
 # Output:
 #   Writes help tip to stdout.
 ################################################################################
-trap abrupt_exit SIGINT
-function abrupt_exit() {
-  printf "\nRun 'airplonk --help' for more."
-  exit
-}
-
-################################################################################
-# Clean up process before exit.
-# Globals:
-#   SPINNER_PID
-# Arguments:
-#   None
-################################################################################
-trap exit_sequence EXIT
+trap exit_sequence SIGINT
 function exit_sequence() {
+  printf "\e[0m"  # disable all text effects
+  printf "\nRun 'airplonk --help' for more."
   # Re-enable return key in case script was killed before re-enabling it.
   stty -igncr 2>/dev/null;
   # Kill any unfinished spinners.
@@ -370,8 +356,9 @@ function main() {
   determine_environment
   check_dependencies
   print_banner
-  printf "\e[1mCargo directory:\033[0m %s\n\n" "${PWD}";
   find_nodes
+  print_nodes
+  choose_target
   transmit
 }
 

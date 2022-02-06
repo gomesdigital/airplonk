@@ -177,6 +177,7 @@ d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
 
 "
   sleep 1
+  printf "\e[1mCargo directory:\033[0m %s\n\n" "${PWD}";
   stty -igncr
 fi
 }
