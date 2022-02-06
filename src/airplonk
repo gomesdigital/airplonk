@@ -193,71 +193,50 @@ function print_nodes() {
 #  Reads the user's decision from stdin.
 ################################################################################
 function choose_target() {
+  printf "\e[1m"  # enable bold text
   # If no nodes were detected...
   if [[ "${NAMES[*]}" == "" ]]\
   && [[ "${IPS[*]}" == "" ]]; then
     ERR_COUNT=$((ERR_COUNT+1))
-    while true; do
-      if [[ $ERR_COUNT -gt 3 ]]; then
-        printf "No nodes found :( (try run 'airplonk -t' for more) \n\n"
-      else
-        printf "No nodes found :( \n\n";
-      fi
-      printf "\e[1m"  # enable bold text
-      printf "Look again? (y/n) >>> "
-      read -r look_again;
-      printf "\033[0m"  # disable bold text
-      if [[ "${look_again}" == "y" ]]\
-      || [[ "${look_again}" == "Y" ]]; then
-        # Reset $look_again for the child function call
-        look_again=""
-        refresh
-        find_nodes
-        return 0
-      fi
-
-      if [[ "${look_again}" == "n" ]]\
-      || [[ "${look_again}" == "N" ]]; then
-        abrupt_exit
-        exit
-      fi
-
-      blink_look_again
-    done
+    if [[ $ERR_COUNT -gt 3 ]]; then
+      printf "No nodes found :( (try run 'airplonk -t' for more) \n\n"
+    else
+      printf "No nodes found :( \n\n";
+    fi
+    printf "Look again? (y/n) >>> "
   else
     # Some nodes were detected...
     printf "\n\n"
-    while true; do
-      printf "\e[1m"  # enable bold text
-      printf "Choose a target node (number)\n"
-      printf ", or look again? (y/n) >>> "
-      read -r TARGET_NODE;
-      printf "\033[0m"  # disable bold text
-      if [[ "${TARGET_NODE}" == "y" ]]\
-      || [[ "${TARGET_NODE}" == "Y" ]]; then
-        refresh
-        # (findNodes calls chooseNodes)
-        find_nodes
-        # Abandon the rest of the logic for the this function call.
-        return
-      fi
 
-      if [[ "${TARGET_NODE}" == "n" ]]\
-      || [[ "${TARGET_NODE}" == "N" ]]; then
-        abrupt_exit
-      fi
-
-      if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]]; then
-        # If input is in range of the listed nodes...
-        if [[ "${TARGET_NODE}" -gt 0 ]]\
-        && [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
-          break
-        fi
-      fi
-
-      blink_choose_target
-    done
+    printf "Choose a target node (number)\n"
+    printf ", or look again? (y/n) >>> "
   fi
+  while true; do
+    read -r TARGET_NODE;
+    printf "\e[0m"  # disable bold text
+    if [[ "${TARGET_NODE}" == "y" ]]\
+    || [[ "${TARGET_NODE}" == "Y" ]]; then
+      IPS=()
+      NAMES=()
+      clear_screen
+      # (findNodes calls chooseNodes)
+      find_nodes
+      # Abandon the rest of the logic for the this function call.
+      return 0
+    fi
+
+    if [[ "${TARGET_NODE}" == "n" ]]\
+    || [[ "${TARGET_NODE}" == "N" ]]; then
+      abrupt_exit
+    fi
+
+    # if input is an integer
+    if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]]\
+    && [[ "${TARGET_NODE}" -gt 0 ]]\
+    && [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
+      return 0
+    fi
+  done
 }
 
 ################################################################################
@@ -286,7 +265,7 @@ function transmit() {
     rsync -a -e "ssh -p $PORT" --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2     "$PWD/"\
         "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
         | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "\e[0m\e[32m%s\rPlonking " "{}"
-    printf "\033[0m"  # disable bold text
+    printf "\e[0m"  # disable bold text
  }
 
 ################################################################################
@@ -330,6 +309,12 @@ function main() {
   ARG="$1"
   if [[ "$1" ]]; then
     case "$ARG" in
+      "-a" | "--android")
+        PORT=8022
+        ;;
+      "-b")
+        :
+        ;;
       "-h" | "--help")
         help
         exit
@@ -346,12 +331,6 @@ function main() {
         version
         exit
         ;;
-      "-b")
-        :
-        ;;
-      "-a" | "--android")
-        PORT=8022
-        ;;
       *)
         printf "\nairplonk: illegal option %s\n\n" "\'$ARG\'"
         usage
@@ -362,7 +341,7 @@ function main() {
 
   if [[ "$COLUMNS" -ge 48 ]]\
   && [[ $ARG != "-b" ]]; then
-    small_banner
+    print_banner
   fi
     local os
     os="$(uname -s)"
