@@ -1,4 +1,20 @@
-#! /bin/bash
+#!/bin/bash
+#
+#  Contains information related functions for the airplonk script.
+#
+#  Copyright (C) 2021 Daniel Gomes-Sebastiao
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, version 2 of the License.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Begin animation functions
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -112,9 +128,12 @@ function scan_spin() {
   spinner=( "Looking for nodes." "Looking for nodes.." "Looking for nodes...")
   while true; do
     for i in "${spinner[@]}"; do
-      printf "\r%s" "$i"
+      printf "\e[32m"  # enable green text
+      printf "$i"
+      printf "\e[0m"  # disable green text
+      printf "\r"
       sleep 0.5
-      printf "\033[2K"
+      printf "\e[2K"
     done
   done
 }
@@ -281,7 +300,7 @@ d88P     888 888        \e[34mdKxO0.    .      .    .\e[0m
     fi
     stty -igncr
   fi
-  printf "Cargo directory: %s\n\n" "${PWD##*/}";
+  printf "\e[1mCargo directory:\e[0m %s\n\n" "${PWD}";
 }
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # End animation functions
