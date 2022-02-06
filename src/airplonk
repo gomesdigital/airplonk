@@ -6,7 +6,7 @@
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, version 3 of the License.
+#  the Free Software Foundation, version 2 of the License.
 #
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-source ./doc/manual
+source ./manual
 source ./animations
 
 declare -r TITLE="AirPlonk"
@@ -152,12 +152,31 @@ function find_nodes() {
   kill $SPINNER_PID
   # Supress stderr termination notification.
   wait $SPINNER_PID 2>/dev/null;
+  printf "\e[32m"  # enable green text
+  printf "Looking for nodes... done."
+  printf "\e[0m"  # disable green text
+  sleep 1
   printf "\n\n"
-  for (( i=0; i<"${#IPS[@]}"; i++ )); do
-  printf "%s\n" "$((i+1)). ${NAMES[i]} ${IPS[i]}"
-  done
-
+  print_nodes
   choose_target
+}
+
+################################################################################
+# Prompt the user to select a target node.
+# Globals:
+#   NAMES
+#   IPS
+# Arguments:
+#   None
+# Output:
+#   Writes any node-ip pairs to stdout.
+# Input:
+#   None
+################################################################################
+function print_nodes() {
+  for (( i=0; i<"${#IPS[@]}"; i++ )); do
+    printf "$((i+1)). \e[1m\e[33m${NAMES[i]}\e[0m - ${IPS[i]}"
+  done
 }
 
 ################################################################################
@@ -184,9 +203,10 @@ function choose_target() {
       else
         printf "No nodes found :( \n\n";
       fi
+      printf "\e[1m"  # enable bold text
       printf "Look again? (y/n) >>> "
       read -r look_again;
-
+      printf "\033[0m"  # disable bold text
       if [[ "${look_again}" == "y" ]]\
       || [[ "${look_again}" == "Y" ]]; then
         # Reset $look_again for the child function call
@@ -204,15 +224,15 @@ function choose_target() {
 
       blink_look_again
     done
-
   else
     # Some nodes were detected...
-    printf "\n"
+    printf "\n\n"
     while true; do
+      printf "\e[1m"  # enable bold text
       printf "Choose a target node (number)\n"
       printf ", or look again? (y/n) >>> "
       read -r TARGET_NODE;
-
+      printf "\033[0m"  # disable bold text
       if [[ "${TARGET_NODE}" == "y" ]]\
       || [[ "${TARGET_NODE}" == "Y" ]]; then
         refresh
@@ -260,11 +280,13 @@ function transmit() {
     timestamp="$(date +"%D" | sed 's/^\///;s/\//-/g') $(date +"%T")"
     local destination="${current_dir##*/} $timestamp"
     destination=$(printf "%s" "$destination" | sed 's/ /\\ /g')
+    printf "\e[1m"  # enable bold text
     printf "Enter your username @%s" "${NAMES[$((TARGET_NODE - 1))]} >>> "
-    read -r username; printf "\n"
+    read -r username;
     rsync -a -e "ssh -p $PORT" --rsync-path="mkdir -p ~/AirPlonks/ && rsync" --info=progress2     "$PWD/"\
         "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
-        | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "%s\rPlonking: " "{}"
+        | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "\e[0m\e[32m%s\rPlonking " "{}"
+    printf "\033[0m"  # disable bold text
  }
 
 ################################################################################
@@ -353,9 +375,10 @@ function main() {
       ;;
   esac
 
-  printf "Cargo directory: %s\n\n" "${PWD##*/}";
-    find_nodes
-    transmit
+  printf "\e[1m"  # enable bold text
+  printf "Cargo directory:\033[0m %s\n\n" "${PWD}";
+  find_nodes
+  transmit
 }
 
 main "$@"
