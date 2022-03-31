@@ -4,7 +4,7 @@
 #
 #  Copyright (C) 2021 Daniel Gomes-Sebastiao
 #
-#  This program is free software: you can redistribute it and/or modify
+#  This program is free software: you can redistribute it and/or mod`if`y
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, version 2 of the License.
 #
@@ -19,9 +19,6 @@
 source ./manual
 source ./animations
 
-declare -r TITLE="AirPlonk"
-declare -r VERSION=1.0.2
-declare -r REVISION_DATE="November 2021"
 declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
                                   "printf" "rsync" "sed" "sleep" "stty" "tput"\
                                   "unbuffer" "xargs" "xdg-open")
@@ -58,10 +55,10 @@ function check_dependencies() {
   local dependencies
   case "$OS" in
     *"Linux"*)
-      dependencies=$LINUX_DEPENDENCIES
+      dependencies="${LINUX_DEPENDENCIES[*]}"
       ;;
     *"darwin"*)
-      dependencies=$MACOS_DEPENDENCIES
+      dependencies="${MACOS_DEPENDENCIES[*]}"
       ;;
   esac
   local missing_dependencies=()
@@ -147,8 +144,8 @@ function find_nodes() {
     name="${name:1:${#name}-2}"
     ip="$(printf "%s\n" "${line}" | awk '{print $2}')"
     # If nmap cannot resolve a hostname,
-    if [[ "${name}" == "" ]]\
-    && [[ "${ip}" != "" ]]; then
+    if [[ "${name}" == "" ]] &&\
+       [[ "${ip}" != "" ]]; then
       # try find it with arp.
       name="$(arp "${ip}" | awk '{print $1}' | tr -d '\n')"
       name=${name#"Address"}
@@ -201,8 +198,8 @@ function print_nodes() {
 function choose_target() {
   printf "\e[1m"  # enable bold text
   # If no nodes were detected...
-  if [[ "${NAMES[*]}" == "" ]]\
-  && [[ "${IPS[*]}" == "" ]]; then
+  if [[ "${NAMES[*]}" == "" ]] &&\
+     [[ "${IPS[*]}" == "" ]]; then
     ERR_COUNT=$((ERR_COUNT+1))
     if [[ $ERR_COUNT -gt 3 ]]; then
       printf "No nodes found :( (try run 'airplonk -t' for more) \n\n"
@@ -218,8 +215,8 @@ function choose_target() {
   fi
   while true; do
     read -r TARGET_NODE;
-    if [[ "${TARGET_NODE}" == "y" ]]\
-    || [[ "${TARGET_NODE}" == "Y" ]]; then
+    if [[ "${TARGET_NODE}" == "y" ]] ||\
+       [[ "${TARGET_NODE}" == "Y" ]]; then
       IPS=()
       NAMES=()
       clear_screen
@@ -229,15 +226,15 @@ function choose_target() {
       break
     fi
 
-    if [[ "${TARGET_NODE}" == "n" ]]\
-    || [[ "${TARGET_NODE}" == "N" ]]; then
+    if [[ "${TARGET_NODE}" == "n" ]] ||\
+       [[ "${TARGET_NODE}" == "N" ]]; then
       exit_sequence
     fi
 
     # if input is an integer
-    if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]]\
-    && [[ "${TARGET_NODE}" -gt 0 ]]\
-    && [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
+    if [[ "${TARGET_NODE}" =~ ^[0-9]+$ ]] &&\
+       [[ "${TARGET_NODE}" -gt 0 ]] &&\
+       [[ "${TARGET_NODE}" -lt $((${#NAMES[@]} + 1)) ]]; then
       break
     fi
   done
@@ -352,7 +349,7 @@ function determine_environment() {
 }
 
 function main() {
-  execute_feature $1
+  execute_feature "$1"
   determine_environment
   check_dependencies
   print_banner
