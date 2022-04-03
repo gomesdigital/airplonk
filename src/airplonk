@@ -219,6 +219,7 @@ function choose_target() {
        [[ "${TARGET_NODE}" == "Y" ]]; then
       IPS=()
       NAMES=()
+      printf "\e[0m" 
       clear_screen
       find_nodes
       print_nodes
