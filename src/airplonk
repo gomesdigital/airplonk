@@ -16,8 +16,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-source ./manual
-source ./animations
+# determines where this script lives
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+source $SCRIPT_DIR/airplonk-manual
+source $SCRIPT_DIR/airplonk-animations
 
 declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
                                   "printf" "rsync" "sed" "sleep" "stty" "tput"\
@@ -40,8 +42,6 @@ declare -i PORT         # The target port to scan for.
 PORT=22
 declare -i SPINNER_PID  # The process ID of the spinner when looking for nodes.
 
-# Begin logic
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ################################################################################
 # Determine missing dependencies.
 # Globals:
@@ -292,8 +292,6 @@ function exit_sequence() {
   printf "\n\n"
   exit
 }
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# End logic
 
 ################################################################################
 # Executes script features according to the argument passed to it.
