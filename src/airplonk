@@ -22,13 +22,6 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 source "$SCRIPT_DIR"/airplonk-manual
 source "$SCRIPT_DIR"/airplonk-animations
 
-declare -r -a LINUX_DEPENDENCIES=("arp" "awk" "clear" "grep" "hostname" "nmap"\
-                                  "printf" "rsync" "sed" "sleep" "stty" "tput"\
-                                  "unbuffer" "xargs" "xdg-open")
-declare -r -a MACOS_DEPENDENCIES=("arp" "awk" "clear" "grep" "ifconfig"\
-                                  "ipconfig" "nmap" "open" "printf" "rsync"\
-                                  "sed" "sleep" "stty" "tput" "unbuffer"\
-                                  "xargs")
 declare ARG             # Optional arg value from runtime.
 declare -a NAMES=()     # Discovered hostnames.
 declare -a IPS=()       # Discovered IP addresses.
@@ -42,61 +35,6 @@ declare OS              # Environment specification.
 declare -i PORT         # The target port to scan for.
 PORT=22
 declare -i SPINNER_PID  # The process ID of the spinner when looking for nodes.
-
-################################################################################
-# Determine missing dependencies.
-# Globals:
-#   None
-# Arguments:
-#   An array of dependencies according to the detected OS.
-# Outputs:
-#   Lists missing dependencies to stdout.
-################################################################################
-function check_dependencies() {
-  local dependencies
-  case "$OS" in
-    *"Linux"*)
-      dependencies="${LINUX_DEPENDENCIES[*]}"
-      ;;
-    *"darwin"*)
-      dependencies="${MACOS_DEPENDENCIES[*]}"
-      ;;
-  esac
-  local missing_dependencies=()
-  for dependency in ${dependencies[*]}; do
-    if ! [[ $(which "$dependency") ]]; then
-      missing_dependencies+=("${dependency}")
-    fi
-  done
-
-  if [[ "${missing_dependencies[*]}" != "" ]]; then
-    printf "You are missing the following dependencies: \n"
-    for missing_dependency in ${missing_dependencies[*]}; do
-      printf -- " - %s\n" "$missing_dependency"
-    done
-    printf "\nPlease install them to use AirPlonk."
-    exit
-  fi
-
-  if [[ $(which "rsync") ]]; then
-    local rsync_version
-    rsync_version=$(rsync --version | grep version | awk '{print $3}')
-    local rsync_major
-    rsync_major=$(printf "%s" "$rsync_version" | cut -c1-3 | cut -c1-1)
-    local rsync_minor="${rsync_major: -1}"
-    if [[ $rsync_major -ge 3 ]]; then
-      if [[ $rsync_minor -le 1 ]]; then
-        printf "You are using rsync version%s\n" "$rsync_version"
-        printf "Please upgrade to rsync version 3.1 or higher to use AirPlonk."
-        exit
-      fi
-    else
-      printf "You are using rsync version%s\n" "$rsync_version"
-      printf "Please upgrade to rsync version 3.1 or higher to use AirPlonk."
-      exit
-    fi
-  fi
-}
 
 ################################################################################
 # Get the IP of the local host.
@@ -352,7 +290,6 @@ function determine_environment() {
 function main() {
   execute_feature "$1"
   determine_environment
-  check_dependencies
   print_banner
   find_nodes
   print_nodes
