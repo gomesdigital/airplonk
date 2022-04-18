@@ -117,7 +117,7 @@ function find_nodes() {
 ################################################################################
 function print_nodes() {
   for (( i=0; i<"${#IPS[@]}"; i++ )); do
-    printf "$((i+1)). \e[1m\e[33m${NAMES[i]}\e[0m - ${IPS[i]}"
+    printf "$((i+1)). \e[1m\e[33m${NAMES[i]}\e[0m - ${IPS[i]}\n"
   done
 }
 
@@ -148,7 +148,6 @@ function choose_target() {
     printf "Look again? (y/n) >>> "
   else
     # Some nodes were detected...
-    printf "\n\n"
     printf "Choose a target node (number)\n"
     printf ", or look again? (y/n) >>> "
   fi
@@ -162,6 +161,7 @@ function choose_target() {
       clear_screen
       find_nodes
       print_nodes
+      printf "\n"
       choose_target
       break
     fi
@@ -208,7 +208,6 @@ function transmit() {
         "${username}"@"${IPS[$((TARGET_NODE - 1))]}":~/AirPlonks/"$destination"\
         | unbuffer -p grep -o "[0-9]*%" | xargs -I{} printf "\e[0m\e[32m%s\rPlonking " "{}"
     printf "\e[0m"  # disable bold text
-    printf "\n"
  }
 
 ################################################################################
@@ -293,8 +292,10 @@ function main() {
   print_banner
   find_nodes
   print_nodes
+  printf "\n"
   choose_target
   transmit
+  printf "\n\n"
 }
 
 main "$@"
