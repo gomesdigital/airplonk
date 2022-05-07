@@ -1,4 +1,4 @@
-# AirPlonk &nbsp;
+# AirPlonk &nbsp; [![Sparkline](https://stars.medv.io/gomesdigital/AirPlonk.svg)](https://stars.medv.io/gomesdigital/AirPlonk)
 
 ![](https://img.shields.io/github/issues/gomesdigital/AirPlonk?color=yellow)
 ![](https://img.shields.io/github/languages/code-size/gomesdigital/AirPlonk?color=green)
