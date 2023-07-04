@@ -1,4 +1,4 @@
-# AirPlonk &nbsp; [![Sparkline](https://stars.medv.io/gomesdigital/AirPlonk.svg)](https://stars.medv.io/gomesdigital/AirPlonk)
+# AirPlonk &nbsp;
 
 ![](https://img.shields.io/github/issues/gomesdigital/AirPlonk?color=yellow)
 ![](https://img.shields.io/github/languages/code-size/gomesdigital/AirPlonk?color=green)
@@ -69,7 +69,7 @@ In this example: pushing files from Android to macOS.
 
 
 ### Notice
-Android 10 introduces [some "difficult" security features](https://issuetracker.google.com/issues/130103885?pli=1). If you're running Android 10 and are not rooted, there is a possibility that host names won't show up!
+Android 10 introduces [some stricter security features](https://issuetracker.google.com/issues/130103885?pli=1). If you're running Android 10+ and are not rooted, there is a possibility that host names won't show up!
 
 ## Help
 
@@ -94,7 +94,7 @@ Sure, open an issue.
 
 ## Contributing
 
-Please read the [CONTRIBUTING](CONTRIBUTING.md) file for details on our code of conduct, and the process for submitting pull requests to us.
+Please read the [CONTRIBUTING](CONTRIBUTING.md) file for details and the process for submitting pull requests.
 
 ## License
 
@@ -103,12 +103,13 @@ This project is licensed under the GNU General Public License v2.0. See the [LIC
 ## Author Info
 
 * **Daniel Gomes-Sebastiao** - *Initial work* - [gomesdigital](https://github.com/gomesdigital)
+* **Patrick Mhoerke** - *[Enhancements for non-rooted Androids](https://github.com/gomesdigital/airplonk/commit/e0234fd536757e28ac8575154f915e4090d465c5)* - [patrickm663](https://github.com/patrickm663)
 
 See also the list of [contributors](https://github.com/gomesdigital/AirPlonk/graphs/contributors) who participated in this project.
 
 ## Acknowledgements
 
-After returning from a short road trip I wanted to dump some media from my Android onto my Macbook...
+After returning from a road trip I wanted to dump a large set of media from my Android onto my Hackintosh...
 
 My girlfriend said - "Just AirDrop it."
 

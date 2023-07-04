@@ -4,4 +4,3 @@
 
 3. Make sure your changes are shellcheck compliant. 
 
-Let's colab.
